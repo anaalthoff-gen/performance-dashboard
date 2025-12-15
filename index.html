@@ -86,7 +86,7 @@
       --btn-icon-only-size: 24px;
       --btn-icon-only-padding: 4px;
       --btn-icon-only-icon-size: 16px;
-      --btn-icon-only-radius: 4px;
+      --btn-icon-only-radius: 24px;
     }
 
     * {
@@ -859,6 +859,420 @@
       animation-delay: 0.3s;
       opacity: 0;
     }
+
+    /* ========================================
+       SCANNING PAGE STYLES
+       ======================================== */
+    
+    /* Tabs Container */
+    .tabs-container {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      padding: 0 40px;
+      border-bottom: 2px solid #242424;
+    }
+    
+    .tab-item {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      letter-spacing: -0.3px;
+      cursor: pointer;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    .tab-item.active {
+      background: #fff;
+      color: #242424;
+      border: 2px solid #242424;
+      border-bottom: none;
+      margin-bottom: -2px;
+      padding-bottom: 10px;
+    }
+    
+    .tab-item:not(.active) {
+      color: rgba(36, 36, 36, 0.5);
+      border: 1px solid rgba(36, 36, 36, 0.1);
+      border-bottom: none;
+    }
+    
+    .tab-item:not(.active):hover {
+      color: rgba(36, 36, 36, 0.75);
+    }
+    
+    /* Scanning Content Area */
+    .scanning-content {
+      flex: 1;
+      background: #fff;
+      padding: 24px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    /* Section Header */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #242424;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+    
+    /* Button disabled state */
+    .btn.btn-outline.disabled,
+    .btn.btn-outline:disabled {
+      color: rgba(36, 36, 36, 0.5);
+      border-color: rgba(36, 36, 36, 0.5);
+      cursor: not-allowed;
+    }
+    
+    .btn.btn-outline.disabled svg,
+    .btn.btn-outline:disabled svg {
+      fill: rgba(36, 36, 36, 0.5);
+    }
+    
+    .btn-small {
+      min-height: 24px;
+      padding: 6px 16px;
+      font-size: 13px;
+    }
+    
+    /* Table Styles */
+    .browser-table {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .table-header {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+    }
+    
+    .table-row {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      position: relative;
+    }
+    
+    .table-row::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 8px;
+      right: 8px;
+      height: 1px;
+      background: rgba(36, 36, 36, 0.1);
+    }
+    
+    .table-row:last-child::after {
+      display: none;
+    }
+    
+    /* Table Cells */
+    .cell-checkbox {
+      width: 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    
+    .cell-browser {
+      width: 320px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 8px;
+    }
+    
+    .cell-size,
+    .cell-items {
+      width: 120px;
+      min-width: 120px;
+      padding: 0 8px;
+      text-align: right;
+      font-size: 13px;
+      font-weight: 500;
+      color: #242424;
+      line-height: 20px;
+      letter-spacing: -0.3px;
+    }
+    
+    .cell-actions {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 8px;
+    }
+    
+    .table-header .cell-browser,
+    .table-header .cell-size,
+    .table-header .cell-items {
+      font-weight: 500;
+    }
+    
+    .table-header .cell-browser {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* Checkbox Styles */
+    .checkbox {
+      width: 24px;
+      height: 24px;
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .checkbox input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 1;
+    }
+    
+    .checkbox-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      border: 2px solid #242424;
+      border-radius: 2px;
+      transition: all 0.15s ease;
+    }
+    
+    .checkbox input:checked + .checkbox-box {
+      background: #004eae;
+      border-color: #004eae;
+    }
+    
+    .checkbox input:checked + .checkbox-box::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 5px;
+      height: 9px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    
+    /* Browser Icon */
+    .browser-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .browser-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .browser-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #242424;
+      line-height: 20px;
+      letter-spacing: -0.3px;
+    }
+    
+    /* Expand Icon */
+    .expand-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    
+    .expand-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: #242424;
+    }
+    
+    /* Sort Icon */
+    .sort-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .sort-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: #0f71f0;
+    }
+    
+    /* Bottom Panel */
+    .bottom-panel {
+      display: flex;
+      align-items: center;
+      padding: 0 58px;
+      height: 80px;
+      background: #fff;
+      position: relative;
+    }
+    
+    .bottom-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 113, 240, 0.07);
+      pointer-events: none;
+    }
+    
+    /* Progress Bar */
+    .progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(36, 36, 36, 0.1);
+    }
+    
+    .progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: #0e68dd;
+      width: 50%;
+      transition: width 0.3s ease;
+      animation: progressMove 2s infinite ease-in-out;
+    }
+    
+    @keyframes progressMove {
+      0% { left: 0; width: 30%; }
+      50% { left: 35%; width: 50%; }
+      100% { left: 70%; width: 30%; }
+    }
+    
+    /* Spinner */
+    .spinner {
+      width: 48px;
+      height: 48px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .spinner-track {
+      position: absolute;
+      inset: 6px;
+      border: 4px solid rgba(36, 36, 36, 0.15);
+      border-radius: 50%;
+    }
+    
+    .spinner-indicator {
+      position: absolute;
+      inset: 6px;
+      border: 4px solid transparent;
+      border-top-color: #0e68dd;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Panel Text */
+    .panel-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding-left: 16px;
+      z-index: 1;
+    }
+    
+    .panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #242424;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+    
+    .panel-subtitle {
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(36, 36, 36, 0.75);
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+    
+    /* Panel Buttons */
+    .panel-buttons {
+      display: flex;
+      gap: 8px;
+      padding-left: 16px;
+      z-index: 1;
+    }
+    
+    .btn-dark {
+      background: #1a1a1a;
+      border: 2px solid #242424;
+      color: #fff;
+    }
+    
+    .btn-dark:hover {
+      background: #333;
+    }
+    
+    .btn-dark:active {
+      background: #444;
+    }
+    
+    /* View States */
+    .view-initial,
+    .view-scanning {
+      display: none;
+    }
+    
+    .view-initial.active,
+    .view-scanning.active {
+      display: contents;
+    }
+    
+    .view-scanning.active .tabs-container,
+    .view-scanning.active .scanning-content,
+    .view-scanning.active .bottom-panel {
+      display: flex;
+    }
   </style>
 </head>
 <body>
@@ -1028,7 +1442,7 @@
       <header class="content-header">
         <!-- Breadcrumbs -->
         <nav class="breadcrumbs animate-in">
-          <button class="btn-icon btn-icon-tertiary" aria-label="Go back">
+          <button class="btn-icon btn-icon-secondary" aria-label="Go back" id="backBtn">
             <svg viewBox="0 0 16 16" fill="currentColor">
               <path d="M10.354 3.146a.5.5 0 0 1 0 .708L6.207 8l4.147 4.146a.5.5 0 0 1-.708.708l-4.5-4.5a.5.5 0 0 1 0-.708l4.5-4.5a.5.5 0 0 1 .708 0z"/>
             </svg>
@@ -1049,13 +1463,15 @@
         </div>
       </header>
 
-      <!-- Tabs Separator -->
-      <div class="tabs-separator"></div>
+      <!-- Initial View -->
+      <div class="view-initial active" id="viewInitial">
+        <!-- Tabs Separator -->
+        <div class="tabs-separator"></div>
 
-      <!-- Content Area -->
-      <section class="content-area">
-        <!-- Illustration -->
-        <div class="illustration animate-in delay-2">
+        <!-- Content Area -->
+        <section class="content-area">
+          <!-- Illustration -->
+          <div class="illustration animate-in delay-2">
           <svg class="illustration-svg" viewBox="0 0 608 240" fill="none" xmlns="http://www.w3.org/2000/svg">
             <ellipse cx="303.545" cy="118.654" rx="272.553" ry="107.486" fill="#DBEAFD"/>
             <path d="M39.5788 145.525C69.8351 191.884 176.546 226.139 303.545 226.139C430.544 226.139 537.255 191.884 567.511 145.525H39.5788Z" fill="#E3F2DD"/>
@@ -1123,13 +1539,178 @@
           </div>
         </div>
       </section>
+      </div>
+
+      <!-- Scanning View -->
+      <div class="view-scanning" id="viewScanning">
+        <!-- Tabs -->
+        <div class="tabs-container">
+          <div class="tab-item active">Browsers</div>
+          <div class="tab-item">Settings</div>
+        </div>
+
+        <!-- Scanning Content -->
+        <section class="scanning-content">
+          <!-- Section Header -->
+          <div class="section-header">
+            <h2 class="section-title">Select browsers to clean</h2>
+            <button class="btn btn-outline btn-small disabled" disabled id="checkAgainBtn">
+              <span class="btn-icon">
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M16.667 10.833c.23 0 .416.187.416.417a7.083 7.083 0 1 1-2.08-5.01l-.586.59a.417.417 0 0 0 .295.712h2.871a.417.417 0 0 0 .417-.417V4.254a.417.417 0 0 0-.712-.295l-.823.823A8.333 8.333 0 1 0 18.333 11.25a.417.417 0 0 0-.416-.417h-1.25z"/>
+                </svg>
+              </span>
+              Check again
+            </button>
+          </div>
+
+          <!-- Browser Table -->
+          <div class="browser-table">
+            <!-- Table Header -->
+            <div class="table-header">
+              <div class="cell-checkbox">
+                <label class="checkbox">
+                  <input type="checkbox" id="selectAllCheckbox">
+                  <span class="checkbox-box"></span>
+                </label>
+              </div>
+              <div class="cell-browser">
+                <span>Browser</span>
+                <span class="sort-icon">
+                  <svg viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 12L3 6h10l-5 6z"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="cell-size">Size</div>
+              <div class="cell-items">Items</div>
+              <div class="cell-actions"></div>
+            </div>
+
+            <!-- Safari Row -->
+            <div class="table-row">
+              <div class="cell-checkbox">
+                <label class="checkbox">
+                  <input type="checkbox" class="browser-checkbox">
+                  <span class="checkbox-box"></span>
+                </label>
+              </div>
+              <div class="cell-browser">
+                <div class="browser-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#242424" stroke-width="1.5"/>
+                    <path d="M15.5 8.5L13.5 13.5L8.5 15.5L10.5 10.5L15.5 8.5Z" stroke="#242424" stroke-width="1.5" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <span class="browser-name">Safari</span>
+              </div>
+              <div class="cell-size">930 MB</div>
+              <div class="cell-items">740</div>
+              <div class="cell-actions">
+                <div class="expand-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chrome Row -->
+            <div class="table-row">
+              <div class="cell-checkbox">
+                <label class="checkbox">
+                  <input type="checkbox" class="browser-checkbox">
+                  <span class="checkbox-box"></span>
+                </label>
+              </div>
+              <div class="cell-browser">
+                <div class="browser-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="#242424" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="4" stroke="#242424" stroke-width="1.5"/>
+                    <path d="M21.17 8H12" stroke="#242424" stroke-width="1.5"/>
+                    <path d="M3.95 6.06L8.54 14" stroke="#242424" stroke-width="1.5"/>
+                    <path d="M10.88 21.94L15.46 14" stroke="#242424" stroke-width="1.5"/>
+                  </svg>
+                </div>
+                <span class="browser-name">Google Chrome</span>
+              </div>
+              <div class="cell-size">832 MB</div>
+              <div class="cell-items">1 632</div>
+              <div class="cell-actions">
+                <div class="expand-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Firefox Row -->
+            <div class="table-row">
+              <div class="cell-checkbox">
+                <label class="checkbox">
+                  <input type="checkbox" class="browser-checkbox">
+                  <span class="checkbox-box"></span>
+                </label>
+              </div>
+              <div class="cell-browser">
+                <div class="browser-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#242424" stroke-width="1.5"/>
+                    <path d="M18 8C16.5 5.5 13 4 10 5C7.5 6 6 8 6 11C6 14.5 8.5 17 12 17C15.5 17 18 14 18 11" stroke="#242424" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <span class="browser-name">Mozilla Firefox</span>
+              </div>
+              <div class="cell-size">200 MB</div>
+              <div class="cell-items">832</div>
+              <div class="cell-actions">
+                <div class="expand-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bottom Panel -->
+        <div class="bottom-panel">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          
+          <div class="spinner">
+            <div class="spinner-track"></div>
+            <div class="spinner-indicator"></div>
+          </div>
+          
+          <div class="panel-text">
+            <span class="panel-title">Scanning your browsers...</span>
+            <span class="panel-subtitle">This may take a few seconds.</span>
+          </div>
+          
+          <div class="panel-buttons">
+            <button class="btn btn-dark" id="stopScanBtn">Stop scan</button>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 
   <script>
-    // Menu Collapse Functionality
+    // Elements
     const mainMenu = document.getElementById('mainMenu');
     const appWindow = document.querySelector('.app-window');
+    const viewInitial = document.getElementById('viewInitial');
+    const viewScanning = document.getElementById('viewScanning');
+    const startScanBtn = document.getElementById('startScanBtn');
+    const stopScanBtn = document.getElementById('stopScanBtn');
+    const backBtn = document.getElementById('backBtn');
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+    const browserCheckboxes = document.querySelectorAll('.browser-checkbox');
     
     // Check for saved state in localStorage
     const isCollapsed = localStorage.getItem('menuCollapsed') === 'true';
@@ -1138,15 +1719,54 @@
       appWindow.classList.add('menu-collapsed');
     }
     
-    // Start Scan button - collapse menu when clicked
-    const startScanBtn = document.getElementById('startScanBtn');
-    startScanBtn.addEventListener('click', () => {
+    // Function to show scanning view
+    function showScanningView() {
       // Collapse the menu
       mainMenu.classList.add('collapsed');
       appWindow.classList.add('menu-collapsed');
-      
-      // Save state to localStorage
       localStorage.setItem('menuCollapsed', 'true');
+      
+      // Switch views
+      viewInitial.classList.remove('active');
+      viewScanning.classList.add('active');
+    }
+    
+    // Function to show initial view
+    function showInitialView() {
+      // Expand the menu
+      mainMenu.classList.remove('collapsed');
+      appWindow.classList.remove('menu-collapsed');
+      localStorage.setItem('menuCollapsed', 'false');
+      
+      // Switch views
+      viewScanning.classList.remove('active');
+      viewInitial.classList.add('active');
+    }
+    
+    // Start Scan button
+    startScanBtn.addEventListener('click', showScanningView);
+    
+    // Stop Scan button
+    stopScanBtn.addEventListener('click', showInitialView);
+    
+    // Back button
+    backBtn.addEventListener('click', showInitialView);
+    
+    // Select All checkbox functionality
+    selectAllCheckbox.addEventListener('change', (e) => {
+      browserCheckboxes.forEach(checkbox => {
+        checkbox.checked = e.target.checked;
+      });
+    });
+    
+    // Update Select All when individual checkboxes change
+    browserCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        const allChecked = Array.from(browserCheckboxes).every(cb => cb.checked);
+        const someChecked = Array.from(browserCheckboxes).some(cb => cb.checked);
+        selectAllCheckbox.checked = allChecked;
+        selectAllCheckbox.indeterminate = someChecked && !allChecked;
+      });
     });
   </script>
 </body>
