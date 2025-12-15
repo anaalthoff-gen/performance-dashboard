@@ -1712,33 +1712,18 @@
     const selectAllCheckbox = document.getElementById('selectAllCheckbox');
     const browserCheckboxes = document.querySelectorAll('.browser-checkbox');
     
-    // Check for saved state in localStorage
-    const isCollapsed = localStorage.getItem('menuCollapsed') === 'true';
-    if (isCollapsed) {
-      mainMenu.classList.add('collapsed');
-      appWindow.classList.add('menu-collapsed');
-    }
+    // Always keep menu collapsed
+    mainMenu.classList.add('collapsed');
+    appWindow.classList.add('menu-collapsed');
     
     // Function to show scanning view
     function showScanningView() {
-      // Collapse the menu
-      mainMenu.classList.add('collapsed');
-      appWindow.classList.add('menu-collapsed');
-      localStorage.setItem('menuCollapsed', 'true');
-      
-      // Switch views
       viewInitial.classList.remove('active');
       viewScanning.classList.add('active');
     }
     
     // Function to show initial view
     function showInitialView() {
-      // Expand the menu
-      mainMenu.classList.remove('collapsed');
-      appWindow.classList.remove('menu-collapsed');
-      localStorage.setItem('menuCollapsed', 'false');
-      
-      // Switch views
       viewScanning.classList.remove('active');
       viewInitial.classList.add('active');
     }
