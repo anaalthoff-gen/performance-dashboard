@@ -1096,6 +1096,9 @@
       height: 24px;
       position: relative;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .checkbox input {
@@ -1104,19 +1107,38 @@
       width: 100%;
       height: 100%;
       cursor: pointer;
-      z-index: 1;
+      z-index: 2;
+      margin: 0;
+    }
+    
+    /* Hover state circle */
+    .checkbox::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 4px;
+      background: transparent;
+      transition: background 0.15s ease;
+      z-index: 0;
+    }
+    
+    .checkbox:hover::before {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    
+    .checkbox:active::before {
+      background: rgba(0, 0, 0, 0.05);
     }
     
     .checkbox-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 16px;
-      height: 16px;
-      border: 2px solid #242424;
-      border-radius: 2px;
+      position: relative;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #444444;
+      border-radius: 4px;
       transition: all 0.15s ease;
+      background: transparent;
+      z-index: 1;
     }
     
     .checkbox input:checked + .checkbox-box {
@@ -1127,13 +1149,50 @@
     .checkbox input:checked + .checkbox-box::after {
       content: '';
       position: absolute;
-      left: 4px;
-      top: 1px;
+      left: 5px;
+      top: 2px;
       width: 5px;
       height: 9px;
       border: solid white;
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
+    }
+    
+    /* Partial/Indeterminate state */
+    .checkbox input:indeterminate + .checkbox-box {
+      background: #004eae;
+      border-color: #004eae;
+    }
+    
+    .checkbox input:indeterminate + .checkbox-box::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 6px;
+      width: 10px;
+      height: 2px;
+      background: white;
+      border: none;
+      transform: none;
+    }
+    
+    /* Disabled state */
+    .checkbox input:disabled + .checkbox-box {
+      border-color: #444444;
+      opacity: 0.5;
+    }
+    
+    .checkbox input:disabled:checked + .checkbox-box {
+      background: #444444;
+      border-color: #444444;
+    }
+    
+    .checkbox:has(input:disabled) {
+      cursor: not-allowed;
+    }
+    
+    .checkbox:has(input:disabled)::before {
+      display: none;
     }
     
     /* Browser Icon */
@@ -1312,6 +1371,38 @@
     
     .btn-dark:active {
       background: #444;
+    }
+    
+    /* Secondary Button */
+    .btn-secondary {
+      background: #fff;
+      border: 2px solid rgba(68, 68, 68, 0.75);
+      color: #444;
+      min-width: 80px;
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 20px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: #f5f5f5;
+      border-color: rgba(68, 68, 68, 0.9);
+    }
+    
+    .btn-secondary:active {
+      background: #eee;
+    }
+    
+    .btn-secondary:disabled,
+    .btn-secondary.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
     
     /* View States */
