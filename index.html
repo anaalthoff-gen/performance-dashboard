@@ -1364,13 +1364,60 @@
       transition: width 4.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
-    /* Scan completed panel styling */
-    .bottom-panel.scan-completed .panel-title {
-      color: #4caf50;
+    /* Panel content containers */
+    .panel-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
     }
     
+    .panel-content.scanning-content {
+      justify-content: flex-start;
+    }
+    
+    .panel-content.completed-content {
+      justify-content: flex-end;
+      padding-right: 0;
+    }
+    
+    /* Completed state - right-aligned text */
+    .panel-text-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+      padding-right: 16px;
+    }
+    
+    .panel-text-right .panel-title {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #242424;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+    
+    .panel-text-right .panel-subtitle {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(36, 36, 36, 0.75);
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+    
+    /* Completed state progress bar */
     .bottom-panel.scan-completed .progress-fill {
-      background: linear-gradient(90deg, #4caf50, #66bb6a);
+      background: rgba(36, 36, 36, 0.1);
+    }
+    
+    /* Clean button disabled state */
+    .btn-primary:disabled {
+      background: #1a1a1a;
+      opacity: 0.5;
+      cursor: not-allowed;
     }
     
     .table-row.sub-row .cell-actions {
@@ -2155,27 +2202,43 @@
         </section>
 
         <!-- Bottom Panel -->
-        <div class="bottom-panel">
+        <div class="bottom-panel" id="bottomPanel">
+          <!-- Progress bar (visible during scanning) -->
           <div class="progress-bar">
             <div class="progress-fill"></div>
           </div>
           
-          <div class="spinner">
-            <div class="spinner-track"></div>
-            <div class="spinner-indicator">
-              <svg viewBox="0 0 42 42">
-                <circle cx="21" cy="21" r="19.5"/>
-              </svg>
+          <!-- Scanning State Content -->
+          <div class="panel-content scanning-content" id="scanningContent">
+            <div class="spinner">
+              <div class="spinner-track"></div>
+              <div class="spinner-indicator">
+                <svg viewBox="0 0 42 42">
+                  <circle cx="21" cy="21" r="19.5"/>
+                </svg>
+              </div>
+            </div>
+            
+            <div class="panel-text">
+              <span class="panel-title">Scanning your browsers...</span>
+              <span class="panel-subtitle">This may take a few seconds.</span>
+            </div>
+            
+            <div class="panel-buttons">
+              <button class="btn btn-secondary" id="stopScanBtn">Stop</button>
             </div>
           </div>
           
-          <div class="panel-text">
-            <span class="panel-title">Scanning your browsers...</span>
-            <span class="panel-subtitle">This may take a few seconds.</span>
-          </div>
-          
-          <div class="panel-buttons">
-            <button class="btn btn-secondary" id="stopScanBtn">Stop</button>
+          <!-- Completed State Content -->
+          <div class="panel-content completed-content" id="completedContent" style="display: none;">
+            <div class="panel-text-right">
+              <span class="panel-title" id="selectedCountText">0 items selected</span>
+              <span class="panel-subtitle">Select browsers to clean</span>
+            </div>
+            
+            <div class="panel-buttons">
+              <button class="btn btn-primary" id="cleanBtn" disabled>Clean</button>
+            </div>
           </div>
         </div>
       </div>
@@ -2210,10 +2273,12 @@
     const expandableRows = document.querySelectorAll('.table-row.expandable');
     const browserRowGroups = document.querySelectorAll('.browser-row-group');
     const bottomPanel = document.querySelector('.bottom-panel');
-    const panelTitle = document.querySelector('.panel-title');
-    const panelSubtitle = document.querySelector('.panel-subtitle');
     const progressFill = document.querySelector('.progress-fill');
     const spinner = document.querySelector('.spinner');
+    const scanningContent = document.getElementById('scanningContent');
+    const completedContent = document.getElementById('completedContent');
+    const selectedCountText = document.getElementById('selectedCountText');
+    const cleanBtn = document.getElementById('cleanBtn');
     
     // ============================================
     // SCAN STATE MANAGEMENT
@@ -2553,8 +2618,10 @@
      * Update bottom panel to show scanning state
      */
     function updateBottomPanelScanning() {
-      if (panelTitle) panelTitle.textContent = 'Scanning your browsers...';
-      if (panelSubtitle) panelSubtitle.textContent = 'This may take a few seconds.';
+      // Show scanning content, hide completed content
+      if (scanningContent) scanningContent.style.display = 'flex';
+      if (completedContent) completedContent.style.display = 'none';
+      
       if (spinner) spinner.classList.add('active');
       if (stopScanBtn) {
         stopScanBtn.textContent = 'Stop';
@@ -2584,20 +2651,36 @@
      * Update bottom panel to show completed state
      */
     function updateBottomPanelCompleted() {
-      if (panelTitle) panelTitle.textContent = 'Scan completed';
-      if (panelSubtitle) {
-        const totalSize = formatSize(SCAN_TARGETS.totalSize);
-        const totalItems = formatNumber(SCAN_TARGETS.totalItems);
-        panelSubtitle.textContent = `Found ${totalSize} in ${totalItems} items`;
-      }
+      // Hide scanning content, show completed content
+      if (scanningContent) scanningContent.style.display = 'none';
+      if (completedContent) completedContent.style.display = 'flex';
+      
       if (spinner) spinner.classList.remove('active');
-      if (stopScanBtn) {
-        stopScanBtn.textContent = 'Clean';
-        stopScanBtn.classList.remove('btn-secondary');
-        stopScanBtn.classList.add('btn-primary');
-      }
+      
+      // Update selected count (starts at 0)
+      updateSelectedCount();
+      
       bottomPanel?.classList.remove('scanning');
       bottomPanel?.classList.add('scan-completed');
+    }
+    
+    /**
+     * Update the selected items count and Clean button state
+     */
+    function updateSelectedCount() {
+      // Count all checked sub-checkboxes
+      const checkedSubCheckboxes = document.querySelectorAll('.sub-checkbox:checked');
+      const count = checkedSubCheckboxes.length;
+      
+      // Update the text
+      if (selectedCountText) {
+        selectedCountText.textContent = `${count} item${count !== 1 ? 's' : ''} selected`;
+      }
+      
+      // Enable/disable Clean button based on selection
+      if (cleanBtn) {
+        cleanBtn.disabled = count === 0;
+      }
     }
     
     /**
@@ -2742,6 +2825,7 @@
         }
         
         updateSelectAllState();
+        updateSelectedCount(); // Update bottom panel count
       });
     });
     
@@ -2775,6 +2859,7 @@
         browserCheckbox.indeterminate = someChecked && !allChecked;
         
         updateSelectAllState();
+        updateSelectedCount(); // Update bottom panel count
       });
     });
     
@@ -2818,6 +2903,8 @@
           }
         });
       });
+      
+      updateSelectedCount(); // Update bottom panel count
     });
   </script>
 </body>
