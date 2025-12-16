@@ -1432,10 +1432,32 @@
       display: none;
     }
     
-    /* Clean button disabled state */
-    .btn-primary:disabled {
+    /* Clean button style for completed state */
+    .btn-clean {
       background: #1a1a1a;
-      opacity: 0.5;
+      border: 2px solid rgba(36, 36, 36, 0.1);
+      color: #fff;
+      min-width: 80px;
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-clean:hover:not(:disabled) {
+      background: #333;
+    }
+    
+    .btn-clean:active:not(:disabled) {
+      background: #444;
+    }
+    
+    .btn-clean:disabled {
+      opacity: 0.4;
       cursor: not-allowed;
     }
     
@@ -2256,7 +2278,7 @@
             </div>
             
             <div class="panel-buttons">
-              <button class="btn btn-primary" id="cleanBtn" disabled>Clean</button>
+              <button class="btn-clean" id="cleanBtn" disabled>Clean</button>
             </div>
           </div>
         </div>
