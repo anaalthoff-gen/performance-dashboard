@@ -1993,8 +1993,8 @@
                   </div>
                   <span class="browser-name">Google Chrome</span>
                 </div>
-                <div class="cell-size">832 MB</div>
-                <div class="cell-items">1 632</div>
+                <div class="cell-size" id="chrome-total-size">-- MB</div>
+                <div class="cell-items" id="chrome-total-items">--</div>
                 <div class="cell-actions">
                   <div class="expand-icon">
                     <svg viewBox="0 0 24 24" fill="currentColor">
@@ -2020,8 +2020,8 @@
                       </svg>
                     </span>
                   </div>
-                  <div class="cell-size">450 MB</div>
-                  <div class="cell-items">1 245</div>
+                  <div class="cell-size" id="chrome-cache-size">-- MB</div>
+                  <div class="cell-items" id="chrome-cache-items">--</div>
                   <div class="cell-actions"></div>
                 </div>
                 <div class="table-row sub-row">
@@ -2039,8 +2039,8 @@
                       </svg>
                     </span>
                   </div>
-                  <div class="cell-size">320 MB</div>
-                  <div class="cell-items">298</div>
+                  <div class="cell-size" id="chrome-cookies-size">-- MB</div>
+                  <div class="cell-items" id="chrome-cookies-items">--</div>
                   <div class="cell-actions"></div>
                 </div>
                 <div class="table-row sub-row">
@@ -2058,8 +2058,8 @@
                       </svg>
                     </span>
                   </div>
-                  <div class="cell-size">62 MB</div>
-                  <div class="cell-items">89</div>
+                  <div class="cell-size" id="chrome-history-size">-- MB</div>
+                  <div class="cell-items" id="chrome-history-items">--</div>
                   <div class="cell-actions"></div>
                 </div>
               </div>
@@ -2080,8 +2080,8 @@
                   </div>
                   <span class="browser-name">Mozilla Firefox</span>
                 </div>
-                <div class="cell-size">200 MB</div>
-                <div class="cell-items">832</div>
+                <div class="cell-size" id="firefox-total-size">-- MB</div>
+                <div class="cell-items" id="firefox-total-items">--</div>
                 <div class="cell-actions">
                   <div class="expand-icon">
                     <svg viewBox="0 0 24 24" fill="currentColor">
@@ -2107,8 +2107,8 @@
                       </svg>
                     </span>
                   </div>
-                  <div class="cell-size">120 MB</div>
-                  <div class="cell-items">654</div>
+                  <div class="cell-size" id="firefox-cache-size">-- MB</div>
+                  <div class="cell-items" id="firefox-cache-items">--</div>
                   <div class="cell-actions"></div>
                 </div>
                 <div class="table-row sub-row">
@@ -2126,8 +2126,8 @@
                       </svg>
                     </span>
                   </div>
-                  <div class="cell-size">65 MB</div>
-                  <div class="cell-items">134</div>
+                  <div class="cell-size" id="firefox-cookies-size">-- MB</div>
+                  <div class="cell-items" id="firefox-cookies-items">--</div>
                   <div class="cell-actions"></div>
                 </div>
                 <div class="table-row sub-row">
@@ -2145,8 +2145,8 @@
                       </svg>
                     </span>
                   </div>
-                  <div class="cell-size">15 MB</div>
-                  <div class="cell-items">44</div>
+                  <div class="cell-size" id="firefox-history-size">-- MB</div>
+                  <div class="cell-items" id="firefox-history-items">--</div>
                   <div class="cell-actions"></div>
                 </div>
               </div>
@@ -2445,85 +2445,108 @@
      * Reset all counter displays to initial state
      */
     function resetCounterDisplays() {
-      // Safari
-      const safariTotalSize = document.getElementById('safari-total-size');
-      const safariTotalItems = document.getElementById('safari-total-items');
-      const safariCacheSize = document.getElementById('safari-cache-size');
-      const safariCacheItems = document.getElementById('safari-cache-items');
-      const safariCookiesSize = document.getElementById('safari-cookies-size');
-      const safariCookiesItems = document.getElementById('safari-cookies-items');
-      const safariHistorySize = document.getElementById('safari-history-size');
-      const safariHistoryItems = document.getElementById('safari-history-items');
+      // All browsers and their sub-items
+      const browsers = ['safari', 'chrome', 'firefox'];
+      const categories = ['total', 'cache', 'cookies', 'history'];
       
-      // Reset to 0
-      [safariTotalSize, safariCacheSize, safariCookiesSize, safariHistorySize].forEach(el => {
-        if (el) el.textContent = '0 MB';
-      });
-      [safariTotalItems, safariCacheItems, safariCookiesItems, safariHistoryItems].forEach(el => {
-        if (el) el.textContent = '0';
+      browsers.forEach(browser => {
+        categories.forEach(category => {
+          const sizeEl = document.getElementById(`${browser}-${category}-size`);
+          const itemsEl = document.getElementById(`${browser}-${category}-items`);
+          if (sizeEl) sizeEl.textContent = '0 MB';
+          if (itemsEl) itemsEl.textContent = '0';
+        });
       });
     }
     
     /**
      * Animate all browser counters simultaneously
+     * Each browser animates with a staggered start for visual effect
      */
     function animateAllCounters() {
       const browsers = SCAN_TARGETS.browsers;
       
-      // Safari counters
-      animateCounter(
-        document.getElementById('safari-total-size'),
-        0, browsers.safari.total.size,
-        SCAN_DURATION, formatSize
-      );
-      animateCounter(
-        document.getElementById('safari-total-items'),
-        0, browsers.safari.total.items,
-        SCAN_DURATION, formatNumber
-      );
+      // ============================================
+      // SAFARI - Starts immediately
+      // ============================================
+      animateBrowserCounters('safari', browsers.safari, 0);
       
-      // Safari sub-items (with staggered delays for visual effect)
+      // ============================================
+      // CHROME - Starts after 800ms delay
+      // ============================================
+      animateBrowserCounters('chrome', browsers.chrome, 800);
+      
+      // ============================================
+      // FIREFOX - Starts after 1600ms delay
+      // ============================================
+      animateBrowserCounters('firefox', browsers.firefox, 1600);
+    }
+    
+    /**
+     * Animate counters for a single browser (total + sub-items)
+     * @param {string} browserName - Browser identifier (safari, chrome, firefox)
+     * @param {object} browserData - Data object with total, cache, cookies, history
+     * @param {number} startDelay - Initial delay before starting animations
+     */
+    function animateBrowserCounters(browserName, browserData, startDelay) {
+      // Calculate remaining time after start delay
+      const remainingDuration = SCAN_DURATION - startDelay;
+      
+      // Total row animation
       setTimeout(() => {
         animateCounter(
-          document.getElementById('safari-cache-size'),
-          0, browsers.safari.cache.size,
-          SCAN_DURATION - 500, formatSize
+          document.getElementById(`${browserName}-total-size`),
+          0, browserData.total.size,
+          remainingDuration, formatSize
         );
         animateCounter(
-          document.getElementById('safari-cache-items'),
-          0, browsers.safari.cache.items,
-          SCAN_DURATION - 500, formatNumber
+          document.getElementById(`${browserName}-total-items`),
+          0, browserData.total.items,
+          remainingDuration, formatNumber
         );
-      }, 300);
+      }, startDelay);
       
+      // Cache sub-item (staggered 200ms after browser start)
       setTimeout(() => {
         animateCounter(
-          document.getElementById('safari-cookies-size'),
-          0, browsers.safari.cookies.size,
-          SCAN_DURATION - 800, formatSize
+          document.getElementById(`${browserName}-cache-size`),
+          0, browserData.cache.size,
+          remainingDuration - 200, formatSize
         );
         animateCounter(
-          document.getElementById('safari-cookies-items'),
-          0, browsers.safari.cookies.items,
-          SCAN_DURATION - 800, formatNumber
+          document.getElementById(`${browserName}-cache-items`),
+          0, browserData.cache.items,
+          remainingDuration - 200, formatNumber
         );
-      }, 600);
+      }, startDelay + 200);
       
+      // Cookies sub-item (staggered 400ms after browser start)
       setTimeout(() => {
         animateCounter(
-          document.getElementById('safari-history-size'),
-          0, browsers.safari.history.size,
-          SCAN_DURATION - 1100, formatSize
+          document.getElementById(`${browserName}-cookies-size`),
+          0, browserData.cookies.size,
+          remainingDuration - 400, formatSize
         );
         animateCounter(
-          document.getElementById('safari-history-items'),
-          0, browsers.safari.history.items,
-          SCAN_DURATION - 1100, formatNumber
+          document.getElementById(`${browserName}-cookies-items`),
+          0, browserData.cookies.items,
+          remainingDuration - 400, formatNumber
         );
-      }, 900);
+      }, startDelay + 400);
       
-      // Chrome and Firefox static values (update at end)
-      // These are already set in HTML, we'll just ensure they display
+      // History sub-item (staggered 600ms after browser start)
+      setTimeout(() => {
+        animateCounter(
+          document.getElementById(`${browserName}-history-size`),
+          0, browserData.history.size,
+          remainingDuration - 600, formatSize
+        );
+        animateCounter(
+          document.getElementById(`${browserName}-history-items`),
+          0, browserData.history.items,
+          remainingDuration - 600, formatNumber
+        );
+      }, startDelay + 600);
     }
     
     /**
@@ -2554,8 +2577,8 @@
       // Update bottom panel UI
       updateBottomPanelCompleted();
       
-      // Expand Safari row to show results
-      expandSafariRow();
+      // Expand all browser rows to show results
+      expandAllBrowserRows();
     }
     
     /**
@@ -2579,16 +2602,23 @@
     }
     
     /**
-     * Expand Safari row to show sub-items
+     * Expand all browser rows to show sub-items after scan completes
      */
-    function expandSafariRow() {
-      const safariGroup = document.querySelector('.browser-row-group[data-browser="safari"]');
-      if (safariGroup) {
-        const expandableRow = safariGroup.querySelector('.table-row.expandable');
-        const subRows = safariGroup.querySelector('.sub-rows');
-        expandableRow?.classList.add('expanded');
-        subRows?.classList.add('expanded');
-      }
+    function expandAllBrowserRows() {
+      const browsers = ['safari', 'chrome', 'firefox'];
+      
+      browsers.forEach((browser, index) => {
+        // Stagger the expansion for visual effect
+        setTimeout(() => {
+          const group = document.querySelector(`.browser-row-group[data-browser="${browser}"]`);
+          if (group) {
+            const expandableRow = group.querySelector('.table-row.expandable');
+            const subRows = group.querySelector('.sub-rows');
+            expandableRow?.classList.add('expanded');
+            subRows?.classList.add('expanded');
+          }
+        }, index * 150); // 150ms stagger between each browser
+      });
     }
     
     /**
