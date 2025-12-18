@@ -477,6 +477,146 @@
       line-height: 20px;
       letter-spacing: -0.3px;
     }
+
+    /* Add-ons Section */
+    .addons-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .addons-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .addons-icon {
+      width: 24.5px;
+      height: 24.5px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .addons-icon-bg {
+      position: absolute;
+      width: 26.25px;
+      height: 26.25px;
+      background: var(--color-success);
+      opacity: 0.1;
+      border-radius: 100px;
+    }
+
+    .addons-icon svg {
+      position: relative;
+      width: 19.25px;
+      height: 19.25px;
+      z-index: 1;
+    }
+
+    .addons-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--color-on-surface);
+      line-height: 28px;
+      letter-spacing: -0.3px;
+    }
+
+    /* Addon Tile (Large) */
+    .addon-tile {
+      width: 356px;
+      height: 148px;
+      background: var(--color-surface);
+      border-radius: 20px;
+      box-shadow: var(--shadow-tile);
+      padding: 16px 136px 16px 16px;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .addon-tile-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      height: 100%;
+    }
+
+    .addon-tile-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .addon-tile-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-on-surface);
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .addon-tile-subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-on-surface-secondary);
+      line-height: 20px;
+      letter-spacing: -0.3px;
+    }
+
+    .addon-tile-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 6px 12px 6px 16px;
+      background: var(--color-surface);
+      border: 2px solid var(--color-on-surface);
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--color-on-surface);
+      line-height: 16px;
+      letter-spacing: -0.3px;
+      cursor: pointer;
+      min-width: 80px;
+      transition: background 0.15s ease;
+      width: fit-content;
+    }
+
+    .addon-tile-btn:hover {
+      background: rgba(36, 36, 36, 0.05);
+    }
+
+    .addon-tile-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .addon-tile-illustration {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 134px;
+      height: 108px;
+      overflow: hidden;
+    }
+
+    .addon-tile-illustration img {
+      position: absolute;
+      right: -64px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 148.5px;
+      height: 81px;
+      object-fit: contain;
+    }
   </style>
 </head>
 <body>
@@ -665,6 +805,41 @@
             </div>
           </div>
         </div>
+
+        <!-- Add-ons Section -->
+        <section class="addons-section">
+          <div class="addons-header">
+            <div class="addons-icon">
+              <div class="addons-icon-bg"></div>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9" stroke="#007644" stroke-width="2"/>
+                <path d="M12 8V16M8 12H16" stroke="#007644" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h2 class="addons-title">Your Additional Services</h2>
+          </div>
+
+          <div class="addons-tiles">
+            <!-- Ultimate Help Desk Tile -->
+            <div class="addon-tile">
+              <div class="addon-tile-content">
+                <div class="addon-tile-text">
+                  <h3 class="addon-tile-title">Ultimate Help Desk</h3>
+                  <p class="addon-tile-subtitle">Get on-demand IT help to fix tech issues.</p>
+                </div>
+                <button class="addon-tile-btn">
+                  Open
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.83333 14.1667L14.1667 5.83333M14.1667 5.83333H6.66667M14.1667 5.83333V13.3333" stroke="#242424" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="addon-tile-illustration">
+                <img src="https://www.figma.com/api/mcp/asset/2542d317-1f90-4c22-a74c-a4dc0879eabe" alt="Help Desk illustration">
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
   </div>
