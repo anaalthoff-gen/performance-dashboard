@@ -891,13 +891,16 @@
   <script>
     // Branch switcher keyboard shortcuts
     document.addEventListener('keydown', function(e) {
-      // Ctrl+Shift+A → main branch
-      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const modifier = isMac ? e.metaKey : e.ctrlKey;
+      
+      // Cmd/Ctrl+Shift+A → main branch
+      if (modifier && e.shiftKey && (e.code === 'KeyA' || e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
         window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/';
       }
-      // Ctrl+Shift+B → progressive-value branch
-      if (e.ctrlKey && e.shiftKey && e.key === 'B') {
+      // Cmd/Ctrl+Shift+B → progressive-value branch
+      if (modifier && e.shiftKey && (e.code === 'KeyB' || e.key === 'B' || e.key === 'b')) {
         e.preventDefault();
         window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/progressive-value/';
       }
