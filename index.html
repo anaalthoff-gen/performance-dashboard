@@ -890,17 +890,15 @@
 
   <script>
     // Branch switcher keyboard shortcuts
+    // Option+A → main branch | Option+B → progressive-value branch
     document.addEventListener('keydown', function(e) {
-      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-      const modifier = isMac ? e.metaKey : e.ctrlKey;
-      
-      // Cmd/Ctrl+Shift+A → main branch
-      if (modifier && e.shiftKey && (e.code === 'KeyA' || e.key === 'A' || e.key === 'a')) {
+      // Option/Alt + A → main branch
+      if (e.altKey && !e.shiftKey && !e.metaKey && !e.ctrlKey && (e.code === 'KeyA')) {
         e.preventDefault();
         window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/';
       }
-      // Cmd/Ctrl+Shift+B → progressive-value branch
-      if (modifier && e.shiftKey && (e.code === 'KeyB' || e.key === 'B' || e.key === 'b')) {
+      // Option/Alt + B → progressive-value branch
+      if (e.altKey && !e.shiftKey && !e.metaKey && !e.ctrlKey && (e.code === 'KeyB')) {
         e.preventDefault();
         window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/progressive-value/';
       }
