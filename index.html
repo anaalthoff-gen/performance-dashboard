@@ -887,5 +887,21 @@
       </div>
     </main>
   </div>
+
+  <script>
+    // Branch switcher keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Ctrl+Shift+A → main branch
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/';
+      }
+      // Ctrl+Shift+B → progressive-value branch
+      if (e.ctrlKey && e.shiftKey && e.key === 'B') {
+        e.preventDefault();
+        window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/progressive-value/';
+      }
+    });
+  </script>
 </body>
 </html>
