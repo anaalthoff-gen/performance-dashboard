@@ -1,0 +1,67 @@
+name: Deploy Multiple Branches to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - progressive-value
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout progressive-value branch
+        uses: actions/checkout@v4
+        with:
+          ref: progressive-value
+          path: progressive-value
+        continue-on-error: true
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Prepare deployment folder
+        run: |
+          mkdir -p _site
+          # Copy main branch content to root
+          cp -r main/* _site/
+          # Remove .git and .github folders from root
+          rm -rf _site/.git _site/.github
+          # Create progressive-value subfolder if branch exists
+          if [ -d "progressive-value" ]; then
+            mkdir -p _site/progressive-value
+            cp -r progressive-value/* _site/progressive-value/
+            rm -rf _site/progressive-value/.git _site/progressive-value/.github
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
