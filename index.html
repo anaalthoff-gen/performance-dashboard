@@ -66,10 +66,11 @@
       position: absolute;
       top: 0;
       left: 0;
+      right: 0;
       height: 44px;
-      width: 196px;
       display: flex;
       align-items: flex-end;
+      justify-content: space-between;
       padding: 0 12px 6px 12px;
       z-index: 10;
     }
@@ -104,15 +105,9 @@
       background: #808080;
     }
 
-    /* Norton Logo - positioned in content wrapper */
     .app-logo {
-      position: absolute;
-      top: 4px;
-      right: 28px;
-      height: 44px;
-      display: flex;
-      align-items: flex-end;
-      z-index: 10;
+      padding-right: 12px;
+      padding-bottom: 6px;
     }
 
     .norton-logo svg {
@@ -626,18 +621,15 @@
 </head>
 <body>
   <div class="app-window">
-    <!-- App Bar (Window Controls) -->
+    <!-- App Bar -->
     <div class="app-bar">
       <div class="window-controls">
         <div class="window-btn close"></div>
         <div class="window-btn minimize"></div>
         <div class="window-btn zoom"></div>
       </div>
-    </div>
-
-    <!-- Norton Logo (positioned in content area) -->
-    <div class="app-logo">
-      <div class="norton-logo">
+      <div class="app-logo">
+        <div class="norton-logo">
           <svg viewBox="0 0 103 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M24.0584 12C24.0584 18.6147 18.66 24 12.0292 24C5.39841 24 0 18.6147 0 12C0 5.37443 5.38751 0 12.0292 0C13.8614 0 15.6063 0.413418 17.155 1.14234L15.1592 3.70988C14.1886 3.33998 13.1307 3.14415 12.0292 3.14415C7.35056 3.14415 3.50079 6.76699 3.17361 11.3581C3.16271 11.456 3.16271 11.5431 3.16271 11.641C3.16271 11.7606 3.1518 11.8803 3.1518 12.0109C3.1518 16.8957 7.13245 20.8667 12.0292 20.8667C16.9259 20.8667 20.9066 16.8957 20.9066 12.0109C20.9066 11.3581 20.8302 10.7162 20.6994 10.107L23.0223 7.12602C23.6876 8.60562 24.0584 10.2593 24.0584 12Z" fill="#FFE01A"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M21.6051 4.74349L12.466 16.4933L6.66406 11.3147L8.7689 8.96471L12.0516 11.8913L19.3694 2.49146C20.2092 3.14422 20.9617 3.8949 21.6051 4.74349Z" fill="#242424"/>
