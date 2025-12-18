@@ -536,6 +536,22 @@
       display: flex;
       position: relative;
       overflow: hidden;
+      transition: box-shadow 0.15s ease;
+    }
+
+    .addon-tile:hover {
+      box-shadow: 0px 3px 8px 0px rgba(95, 79, 58, 0.3);
+    }
+
+    /* Not activated state */
+    .addon-tile.not-activated {
+      background: var(--color-background);
+      box-shadow: none;
+      border: 1px solid rgba(36, 36, 36, 0.1);
+    }
+
+    .addon-tile.not-activated:hover {
+      box-shadow: none;
     }
 
     .addon-tile-content {
@@ -553,11 +569,30 @@
       flex: 1;
     }
 
+    .addon-tile-title-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .addon-tile-title {
       font-size: 15px;
       font-weight: 700;
       color: var(--color-on-surface);
       line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .addon-tile-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      background: var(--color-brand);
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--color-on-surface);
+      line-height: 16px;
       letter-spacing: -0.3px;
     }
 
@@ -585,12 +620,17 @@
       letter-spacing: -0.3px;
       cursor: pointer;
       min-width: 80px;
-      transition: background 0.15s ease;
+      transition: all 0.15s ease;
       width: fit-content;
     }
 
-    .addon-tile-btn:hover {
-      background: rgba(36, 36, 36, 0.05);
+    .addon-tile:hover .addon-tile-btn {
+      background: var(--color-on-surface);
+      color: white;
+    }
+
+    .addon-tile:hover .addon-tile-btn svg path {
+      stroke: white;
     }
 
     .addon-tile-btn svg {
@@ -610,11 +650,11 @@
 
     .addon-tile-illustration img {
       position: absolute;
-      right: -64px;
+      right: -14px;
       top: 50%;
       transform: translateY(-50%);
-      width: 148.5px;
-      height: 81px;
+      width: 134px;
+      height: 108px;
       object-fit: contain;
     }
   </style>
@@ -824,7 +864,10 @@
             <div class="addon-tile">
               <div class="addon-tile-content">
                 <div class="addon-tile-text">
-                  <h3 class="addon-tile-title">Ultimate Help Desk</h3>
+                  <div class="addon-tile-title-row">
+                    <h3 class="addon-tile-title">Ultimate Help Desk</h3>
+                    <span class="addon-tile-label">New</span>
+                  </div>
                   <p class="addon-tile-subtitle">Get on-demand IT help to fix tech issues.</p>
                 </div>
                 <button class="addon-tile-btn">
@@ -835,7 +878,7 @@
                 </button>
               </div>
               <div class="addon-tile-illustration">
-                <img src="https://www.figma.com/api/mcp/asset/2542d317-1f90-4c22-a74c-a4dc0879eabe" alt="Help Desk illustration">
+                <img src="Assets/Illustrations/Performance Pillar v1.1.0/Addon/Feature Tile/S/illu_s_029.svg" alt="Help Desk illustration">
               </div>
             </div>
           </div>
