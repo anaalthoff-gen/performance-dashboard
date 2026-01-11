@@ -262,17 +262,21 @@
       left: 196px;
       background: var(--color-background);
       border-radius: 16px;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
     }
 
     /* Content Area */
     .content-area {
-      padding: 56px 40px 40px 40px;
+      padding: 40px 40px 40px 40px;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
       gap: 32px;
       width: 728px;
+      max-width: 100%;
     }
 
     /* Header Section */
@@ -318,80 +322,182 @@
       letter-spacing: -0.3px;
     }
 
-    /* Feature Tiles Container */
-    .feature-tiles {
-      display: flex;
-      gap: 16px;
-      width: 100%;
-    }
-
-    /* Feature Tile */
-    .feature-tile {
-      width: 356px;
-      height: 288px;
-      background: var(--color-surface);
-      border-radius: 20px;
-      box-shadow: var(--shadow-tile);
-      padding: 92px 16px 16px 16px;
-      display: flex;
-      flex-direction: column;
+    /* Run Performance Scan Button */
+    .scan-btn {
+      display: inline-flex;
       align-items: center;
-      gap: 16px;
-      position: relative;
-      isolation: isolate;
-    }
-
-    .tile-illustration {
-      position: absolute;
-      top: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 110px;
-      height: 60px;
-      z-index: 4;
-    }
-
-    .tile-illustration img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .tile-content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      text-align: center;
-      width: 100%;
-      z-index: 3;
-    }
-
-    .tile-title {
-      font-size: 19px;
+      justify-content: center;
+      padding: 14px 32px;
+      background: var(--color-brand);
+      border: 3px solid var(--color-on-surface);
+      border-radius: 24px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--color-on-surface);
-      line-height: 28px;
-      letter-spacing: -0.3px;
-      width: 100%;
-    }
-
-    .tile-subtitle {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--color-on-surface-secondary);
       line-height: 20px;
       letter-spacing: -0.3px;
-      width: 100%;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
     }
 
-    .tile-btn {
+    .scan-btn:hover {
+      background: #e6d424;
+    }
+
+    /* Performance Tools Card */
+    .tools-card {
+      background: #f2f2f2;
+      border-radius: 20px;
+      box-shadow: 0px 4px 12px rgba(68, 68, 68, 0.08);
+      width: 100%;
       display: flex;
       flex-direction: column;
+    }
+
+    .tools-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 16px 16px;
+    }
+
+    .tools-header-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #444;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .tools-header-label {
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(68, 68, 68, 0.75);
+      line-height: 16px;
+      letter-spacing: -0.3px;
+    }
+
+    /* Tool Row */
+    .tool-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      border-radius: 8px;
+    }
+
+    .tool-row:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .tool-badge {
+      width: 48px;
+      height: 48px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .tool-badge-circle {
+      position: absolute;
+      inset: 12.5%;
+      background: #def4f8;
+      border-radius: 50%;
+    }
+
+    .tool-badge-icon {
+      position: absolute;
+      inset: 25%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tool-badge-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: #444;
+    }
+
+    .tool-badge-status {
+      position: absolute;
+      right: 4px;
+      bottom: 4px;
+      width: 10px;
+      height: 10px;
+      background: #388700;
+      border-radius: 50%;
+    }
+
+    .tool-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #444;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .tool-subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(68, 68, 68, 0.75);
+      line-height: 20px;
+      letter-spacing: -0.3px;
+    }
+
+    .tool-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .tool-stat {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(68, 68, 68, 0.75);
+      line-height: 20px;
+    }
+
+    .tool-chevron {
+      width: 24px;
+      height: 24px;
+      fill: #444;
+    }
+
+    /* Quick Clean Section */
+    .quick-clean-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      padding: 16px 20px 16px 16px;
+    }
+
+    .quick-clean-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(68, 68, 68, 0.75);
+      line-height: 20px;
+      letter-spacing: -0.3px;
+      flex: 1;
+      text-align: right;
+    }
+
+    .quick-clean-btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       padding: 8px 16px;
-      background: var(--color-surface);
+      background: white;
       border: 2px solid var(--color-on-surface);
       border-radius: 24px;
       font-size: 13px;
@@ -401,82 +507,136 @@
       letter-spacing: -0.3px;
       cursor: pointer;
       min-width: 80px;
-      transition: background 0.15s ease;
-      z-index: 2;
+      transition: all 0.15s ease;
     }
 
-    .tile-btn:hover {
-      background: rgba(36, 36, 36, 0.05);
+    .quick-clean-btn:hover {
+      background: var(--color-on-surface);
+      color: white;
     }
 
-    .tile-status {
-      position: absolute;
-      bottom: 16px;
-      left: 16px;
-      right: 16px;
-      background: rgba(36, 36, 36, 0.05);
-      border-radius: 12px;
-      padding: 6px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 44px;
-      z-index: 5;
+    .tools-divider {
+      height: 1px;
+      background: rgba(68, 68, 68, 0.1);
+      margin: 0;
     }
 
-    .tile-status-text {
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--color-on-surface-secondary);
-      line-height: 16px;
-      letter-spacing: -0.3px;
-      text-align: center;
-    }
-
-    /* Small Feature Tile */
-    .feature-tile-small {
-      position: absolute;
-      left: 24px;
-      top: 712px;
-      width: 370px;
-      min-height: 72px;
-      background: var(--color-surface);
+    /* Data Card (Chart) */
+    .data-card {
+      background: #f2f2f2;
       border-radius: 20px;
-      box-shadow: var(--shadow-tile);
-      padding: 12px 40px 12px 68px;
+      box-shadow: 0px 4px 12px rgba(68, 68, 68, 0.08);
+      padding: 16px;
+      width: 100%;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .data-header {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .data-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #444;
+      line-height: 24px;
+    }
+
+    .data-subtitle {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(68, 68, 68, 0.75);
+      line-height: 20px;
+    }
+
+    .data-info-icon {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .chart-area {
+      height: 128px;
+      position: relative;
+    }
+
+    .chart-bars {
+      position: absolute;
+      inset: 0 16px 24px 0;
+      display: flex;
+      align-items: flex-end;
       gap: 8px;
     }
 
-    .small-tile-icon {
-      position: absolute;
-      left: 12px;
-      top: 12px;
-      width: 48px;
-      height: 48px;
-    }
-
-    .small-tile-content {
+    .chart-bar {
       flex: 1;
+      height: 104px;
       display: flex;
       flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
     }
 
-    .small-tile-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--color-on-surface);
-      line-height: 24px;
-      letter-spacing: -0.3px;
+    .bar-fill {
+      width: 16px;
+      background: #004eae;
+      border-radius: 4px 4px 0 0;
     }
 
-    .small-tile-subtitle {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--color-on-surface-secondary);
-      line-height: 20px;
-      letter-spacing: -0.3px;
+    .bar-threat {
+      width: 16px;
+      height: 6px;
+      background: #ffbf00;
+      border-radius: 4px 4px 0 0;
+      margin-bottom: 2px;
+    }
+
+    .chart-x-axis {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(36, 36, 36, 0.1);
+    }
+
+    .chart-x-label {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(68, 68, 68, 0.5);
+      line-height: 16px;
+    }
+
+    .chart-y-axis {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 16px;
+      width: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 8px;
+    }
+
+    .chart-y-label {
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(68, 68, 68, 0.5);
+      line-height: 16px;
+      text-align: right;
     }
 
     /* Add-ons Section */
@@ -804,45 +964,278 @@
     <main class="content-wrapper">
       <div class="content-area">
         <!-- Page Header -->
-        <div class="page-header">
-          <div class="header-badge">
-            <img src="Assets/icons/Performance Pillar/Changes in statuses/Header Badge.svg" alt="Performance badge">
+        <div class="page-header" style="justify-content: space-between;">
+          <div style="display: flex; gap: 8px; align-items: center; flex: 1;">
+            <div class="header-badge">
+              <img src="Assets/icons/Performance Pillar/Changes in statuses/Header Badge.svg" alt="Performance badge">
+            </div>
+            <div class="header-text">
+              <h1 class="header-title">Performance</h1>
+              <p class="header-subtitle">Last Scan: 2 days ago</p>
+            </div>
           </div>
-          <div class="header-text">
-            <h1 class="header-title">Performance</h1>
-            <p class="header-subtitle">We're helping to improve your Mac's performance.</p>
+          <button class="scan-btn">Run Performance Scan</button>
+        </div>
+
+        <!-- Performance Tools Card -->
+        <div class="tools-card">
+          <!-- Header -->
+          <div class="tools-header">
+            <span class="tools-header-title">Performance tools running</span>
+            <span class="tools-header-label">Scanned items</span>
+          </div>
+
+          <!-- File Cleanup -->
+          <div class="tool-row">
+            <div class="tool-badge">
+              <div class="tool-badge-circle"></div>
+              <div class="tool-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.5 21H4.5C3.11929 21 2 19.8807 2 18.5V5.5C2 4.11929 3.11929 3 4.5 3H19.5C20.8807 3 22 4.11929 22 5.5V18.5C22 19.8807 20.8807 21 19.5 21ZM4.5 4.5C3.94772 4.5 3.5 4.94772 3.5 5.5V18.5C3.5 19.0523 3.94772 19.5 4.5 19.5H19.5C20.0523 19.5 20.5 19.0523 20.5 18.5V5.5C20.5 4.94772 20.0523 4.5 19.5 4.5H4.5Z"/>
+                  <path d="M8 12H16V13.5H8V12Z"/>
+                  <path d="M8 8H16V9.5H8V8Z"/>
+                  <path d="M8 16H13V17.5H8V16Z"/>
+                </svg>
+              </div>
+              <div class="tool-badge-status"></div>
+            </div>
+            <div class="tool-content">
+              <span class="tool-title">File Cleanup</span>
+              <span class="tool-subtitle">Find and clean junk files to get more space.</span>
+            </div>
+            <div class="tool-actions">
+              <span class="tool-stat">250 MB (3,000 items)</span>
+              <svg class="tool-chevron" viewBox="0 0 24 24">
+                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Browser Cleaner -->
+          <div class="tool-row">
+            <div class="tool-badge">
+              <div class="tool-badge-circle"></div>
+              <div class="tool-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 16H13V18H11V16ZM11 6H13V14H11V6Z"/>
+                </svg>
+              </div>
+              <div class="tool-badge-status"></div>
+            </div>
+            <div class="tool-content">
+              <span class="tool-title">Browser cleaner</span>
+              <span class="tool-subtitle">Clear browser clutter and free up space.</span>
+            </div>
+            <div class="tool-actions">
+              <span class="tool-stat">250 MB (3,000 items)</span>
+              <svg class="tool-chevron" viewBox="0 0 24 24">
+                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Quick Clean Row -->
+          <div class="quick-clean-row">
+            <span class="quick-clean-text">Total of 1,962 MB (3,204 items) to clean</span>
+            <button class="quick-clean-btn">Quick clean</button>
+          </div>
+
+          <div class="tools-divider"></div>
+
+          <!-- Startup Manager -->
+          <div class="tool-row">
+            <div class="tool-badge">
+              <div class="tool-badge-circle"></div>
+              <div class="tool-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L4 5V11.09C4 16.14 7.41 20.85 12 22C16.59 20.85 20 16.14 20 11.09V5L12 2ZM18 11.09C18 15.09 15.45 18.79 12 19.92C8.55 18.79 6 15.1 6 11.09V6.39L12 4.14L18 6.39V11.09Z"/>
+                  <path d="M8 11L10.5 13.5L16 8L14.59 6.59L10.5 10.67L9.41 9.59L8 11Z"/>
+                </svg>
+              </div>
+              <div class="tool-badge-status"></div>
+            </div>
+            <div class="tool-content">
+              <span class="tool-title">Startup Manager</span>
+              <span class="tool-subtitle">Improve your Mac's startup time by selecting which apps to launch.</span>
+            </div>
+            <div class="tool-actions">
+              <span class="tool-stat">3 Apps</span>
+              <svg class="tool-chevron" viewBox="0 0 24 24">
+                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Uninstaller -->
+          <div class="tool-row">
+            <div class="tool-badge">
+              <div class="tool-badge-circle"></div>
+              <div class="tool-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM12 6L16 12H13V18H11V12H8L12 6Z"/>
+                </svg>
+              </div>
+              <div class="tool-badge-status"></div>
+            </div>
+            <div class="tool-content">
+              <span class="tool-title">Uninstaller</span>
+              <span class="tool-subtitle">Remove unused apps to improve performance.</span>
+            </div>
+            <div class="tool-actions">
+              <span class="tool-stat">5 apps</span>
+              <svg class="tool-chevron" viewBox="0 0 24 24">
+                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Duplicate Finder -->
+          <div class="tool-row">
+            <div class="tool-badge">
+              <div class="tool-badge-circle"></div>
+              <div class="tool-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
+                </svg>
+              </div>
+              <div class="tool-badge-status"></div>
+            </div>
+            <div class="tool-content">
+              <span class="tool-title">Duplicate finder</span>
+              <span class="tool-subtitle">Find and delete duplicates to reclaim space.</span>
+            </div>
+            <div class="tool-actions">
+              <span class="tool-stat">500 duplicate files</span>
+              <svg class="tool-chevron" viewBox="0 0 24 24">
+                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Photo Cleaner -->
+          <div class="tool-row">
+            <div class="tool-badge">
+              <div class="tool-badge-circle"></div>
+              <div class="tool-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z"/>
+                </svg>
+              </div>
+              <div class="tool-badge-status"></div>
+            </div>
+            <div class="tool-content">
+              <span class="tool-title">Photo Cleaner</span>
+              <span class="tool-subtitle">Clean up photos and keep only what matters.</span>
+            </div>
+            <div class="tool-actions">
+              <span class="tool-stat">450 similar and blurry photos</span>
+              <svg class="tool-chevron" viewBox="0 0 24 24">
+                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Cloud Drive Cleaner -->
+          <div class="tool-row">
+            <div class="tool-badge">
+              <div class="tool-badge-circle"></div>
+              <div class="tool-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04ZM19 18H6C3.79 18 2 16.21 2 14C2 11.95 3.53 10.24 5.56 10.03L6.63 9.92L7.13 8.97C8.08 7.14 9.94 6 12 6C14.62 6 16.88 7.86 17.39 10.43L17.69 11.93L19.22 12.04C20.78 12.14 22 13.45 22 15C22 16.65 20.65 18 19 18Z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="tool-content">
+              <span class="tool-title">Cloud Drive Cleaner</span>
+              <span class="tool-subtitle">Review cloud storage across connected drives</span>
+            </div>
+            <div class="tool-actions">
+              <svg class="tool-chevron" viewBox="0 0 24 24">
+                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
+              </svg>
+            </div>
           </div>
         </div>
 
-        <!-- Feature Tiles -->
-        <div class="feature-tiles">
-          <!-- File Cleanup Tile -->
-          <div class="feature-tile">
-            <div class="tile-illustration">
-              <img src="Assets/Illustrations/Performance Pillar/Changes in statuses/Main Feature Tiles/Feature tile/S/illu_s_118.svg" alt="File Cleanup illustration">
+        <!-- What You Have Cleaned Chart -->
+        <div class="data-card">
+          <div class="data-header">
+            <span class="data-title">What you have cleaned so far</span>
+            <span class="data-subtitle">8GB in the last 6 months</span>
+            <svg class="data-info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+          </div>
+          <div class="chart-area">
+            <div class="chart-bars">
+              <div class="chart-bar">
+                <div class="bar-fill" style="height: 70px;"></div>
+              </div>
+              <div class="chart-bar">
+                <div class="bar-fill" style="height: 36px;"></div>
+              </div>
+              <div class="chart-bar">
+                <div class="bar-threat"></div>
+                <div class="bar-fill" style="height: 56px;"></div>
+              </div>
+              <div class="chart-bar">
+                <div class="bar-threat"></div>
+                <div class="bar-fill" style="height: 84px;"></div>
+              </div>
+              <div class="chart-bar">
+                <div class="bar-fill" style="height: 70px;"></div>
+              </div>
+              <div class="chart-bar">
+                <div class="bar-fill" style="height: 45px;"></div>
+              </div>
             </div>
-            <div class="tile-content">
-              <h3 class="tile-title">File Cleanup</h3>
-              <p class="tile-subtitle">Find and clean junk files to get more space.</p>
+            <div class="chart-x-axis">
+              <span class="chart-x-label">Mar</span>
+              <span class="chart-x-label">Apr</span>
+              <span class="chart-x-label">May</span>
+              <span class="chart-x-label">Jun</span>
+              <span class="chart-x-label">Jul</span>
+              <span class="chart-x-label">Aug</span>
             </div>
-            <button class="tile-btn">Open</button>
-            <div class="tile-status">
-              <span class="tile-status-text">290 MB cleaned in last 60 days</span>
+            <div class="chart-y-axis">
+              <span class="chart-y-label">800</span>
+              <span class="chart-y-label">0</span>
             </div>
           </div>
+        </div>
 
-          <!-- Startup Manager Tile -->
-          <div class="feature-tile">
-            <div class="tile-illustration">
-              <img src="Assets/Illustrations/Performance Pillar/Changes in statuses/Main Feature Tiles/Feature tile/S/Performance Pillar/Changes in statuses/Main Feature Tiles/Feature tile/S/178.svg" alt="Startup Manager illustration">
+        <!-- Your Additional Services -->
+        <div class="addons-section">
+          <div class="addons-header">
+            <div class="addons-icon">
+              <div class="addons-icon-bg"></div>
+              <svg viewBox="0 0 24 24" fill="#007644" stroke="#007644" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
             </div>
-            <div class="tile-content">
-              <h3 class="tile-title">Startup Manager</h3>
-              <p class="tile-subtitle">Improve your Mac's startup time by selecting which apps to launch.</p>
+            <span class="addons-title">Your Additional Services</span>
+          </div>
+          <div class="addon-tile not-activated">
+            <div class="addon-tile-content">
+              <div class="addon-tile-text">
+                <div class="addon-tile-title-row">
+                  <span class="addon-tile-title">Ultimate Help Desk</span>
+                  <span class="addon-tile-label">New</span>
+                </div>
+                <span class="addon-tile-subtitle">Get on-demand IT help to fix tech issues.</span>
+              </div>
+              <button class="addon-tile-btn">
+                Activate
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
             </div>
-            <button class="tile-btn">Open</button>
-            <div class="tile-status">
-              <span class="tile-status-text">3 apps are launching automatically</span>
+            <div class="addon-tile-illustration">
+              <img src="Assets/Illustrations/Performance Pillar v1.1.0/Addon/Feature Tile/S/illu_s_029.svg" alt="Ultimate Help Desk illustration">
             </div>
           </div>
         </div>
