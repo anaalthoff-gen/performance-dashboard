@@ -857,6 +857,272 @@
       text-align: right;
     }
 
+    /* ========================================
+       PERFORMANCE SCAN OVERLAY
+       ======================================== */
+    .scan-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--color-background);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--timing-normal) var(--easing), visibility var(--timing-normal) var(--easing);
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .scan-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .scan-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 60px 40px 16px 40px;
+      width: 100%;
+    }
+
+    .scan-header-title {
+      font-size: 27px;
+      font-weight: 800;
+      color: var(--color-on-surface);
+      line-height: 36px;
+      letter-spacing: -0.3px;
+      text-align: center;
+    }
+
+    .scan-header-subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-on-surface-secondary);
+      line-height: 20px;
+      letter-spacing: -0.3px;
+      text-align: center;
+      max-width: 560px;
+    }
+
+    .scan-step-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      background: rgba(68, 68, 68, 0.1);
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #444;
+      line-height: 16px;
+      margin-top: 8px;
+    }
+
+    .scan-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+      padding: 40px;
+    }
+
+    .scan-pillars {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* Main scanning circle */
+    .scan-main-circle {
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0px 1px 4px rgba(95, 79, 58, 0.4);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .scan-progress-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+
+    .scan-progress-ring svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .scan-progress-ring circle {
+      fill: none;
+      stroke-width: 6;
+    }
+
+    .scan-progress-ring .bg {
+      stroke: #f1f6fe;
+    }
+
+    .scan-progress-ring .progress {
+      stroke: #0F71F0;
+      stroke-linecap: round;
+      stroke-dasharray: 1100;
+      stroke-dashoffset: 1100;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .scan-illustration {
+      width: 148px;
+      height: 81px;
+      margin-bottom: 16px;
+    }
+
+    .scan-illustration img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .scan-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 240px;
+    }
+
+    .scan-status-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .scan-status-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-on-surface);
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .scan-percentage {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-on-surface);
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .scan-description {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-on-surface-secondary);
+      line-height: 20px;
+      letter-spacing: -0.3px;
+      text-align: center;
+    }
+
+    /* Side circles */
+    .scan-side-circle {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0px 1px 4px rgba(95, 79, 58, 0.4);
+      opacity: 0.7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      gap: 8px;
+    }
+
+    .scan-side-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .scan-side-icon-bg {
+      position: absolute;
+      inset: 8.33%;
+      background: #f2f2f2;
+      border-radius: 50%;
+    }
+
+    .scan-side-icon svg {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      fill: #444;
+    }
+
+    .scan-side-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-on-surface);
+      line-height: 24px;
+      letter-spacing: -0.3px;
+      text-align: center;
+      width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Scan actions */
+    .scan-actions {
+      padding: 60px 32px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .stop-scan-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      background: white;
+      border: 3px solid var(--color-on-surface);
+      border-radius: 24px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--color-on-surface);
+      line-height: 20px;
+      letter-spacing: -0.3px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-width: 80px;
+    }
+
+    .stop-scan-btn:hover {
+      background: var(--color-on-surface);
+      color: white;
+    }
+
+    /* Animation for spinner */
+    @keyframes scanPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    .scan-main-circle.scanning {
+      animation: scanPulse 2s ease-in-out infinite;
+    }
+
     /* Add-ons Section */
     .addons-section {
       display: flex;
@@ -1192,7 +1458,7 @@
               <p class="header-subtitle">Last Scan: 2 days ago</p>
         </div>
         </div>
-          <button class="scan-btn">Run Performance Scan</button>
+          <button class="scan-btn" id="runScanBtn">Run Performance Scan</button>
           </div>
 
         <!-- Performance Tools Card -->
@@ -1492,6 +1758,69 @@
             </div>
           </div>
 
+      </div>
+
+      <!-- Performance Scan Overlay -->
+      <div class="scan-overlay" id="scanOverlay">
+        <div class="scan-header">
+          <h1 class="scan-header-title">Performance Scan</h1>
+          <p class="scan-header-subtitle">We're performing an optimized scan to find any threats to you.</p>
+          <span class="scan-step-label" id="scanStepLabel">Step 1/2: Quick clean: Files</span>
+        </div>
+
+        <div class="scan-content">
+          <div class="scan-pillars">
+            <!-- Main scanning circle -->
+            <div class="scan-main-circle scanning" id="scanMainCircle">
+              <div class="scan-progress-ring">
+                <svg viewBox="0 0 360 360">
+                  <circle class="bg" cx="180" cy="180" r="174"></circle>
+                  <circle class="progress" id="scanProgressCircle" cx="180" cy="180" r="174"></circle>
+                </svg>
+              </div>
+              <div class="scan-illustration">
+                <img src="Assets/Illustrations/Performance Pillar v1.1.0/Main Tile/illu_s_118.svg" alt="Scanning illustration">
+              </div>
+              <div class="scan-text">
+                <div class="scan-status-row">
+                  <span class="scan-status-text">Scanning...</span>
+                  <span class="scan-percentage" id="scanPercentage">0%</span>
+                </div>
+                <p class="scan-description" id="scanDescription">We're looking for unnecessary files.</p>
+              </div>
+            </div>
+
+            <!-- Side circle 1: Startup apps -->
+            <div class="scan-side-circle">
+              <div class="scan-side-icon">
+                <div class="scan-side-icon-bg"></div>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 9.5L12 4L21 9.5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V9.5Z" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 21V12H15V21" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="scan-side-text">On startup apps</span>
+            </div>
+
+            <!-- Side circle 2: Advanced issues -->
+            <div class="scan-side-circle">
+              <div class="scan-side-icon">
+                <div class="scan-side-icon-bg"></div>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V9" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 18L18 20L22 16" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 8V12" stroke="#444" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 16H12.01" stroke="#444" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="scan-side-text">Advanced issues</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="scan-actions">
+          <button class="stop-scan-btn" id="stopScanBtn">Stop Scan</button>
+        </div>
       </div>
     </main>
   </div>
@@ -1816,6 +2145,118 @@
       document.addEventListener('DOMContentLoaded', function() {
         // Run initial animation after a small delay
         setTimeout(runInitialAnimation, 100);
+      });
+      
+      // ========================================
+      // PERFORMANCE SCAN CONTROLLER
+      // ========================================
+      
+      const scanOverlay = document.getElementById('scanOverlay');
+      const runScanBtn = document.getElementById('runScanBtn');
+      const stopScanBtn = document.getElementById('stopScanBtn');
+      const scanProgressCircle = document.getElementById('scanProgressCircle');
+      const scanPercentage = document.getElementById('scanPercentage');
+      const scanDescription = document.getElementById('scanDescription');
+      const scanStepLabel = document.getElementById('scanStepLabel');
+      
+      let scanInterval = null;
+      let currentProgress = 0;
+      
+      // Start scan
+      function startScan() {
+        if (!scanOverlay) return;
+        
+        // Show overlay with animation
+        scanOverlay.classList.add('active');
+        currentProgress = 0;
+        updateProgress(0);
+        
+        // Animate progress
+        scanInterval = setInterval(function() {
+          currentProgress += Math.random() * 3 + 0.5;
+          
+          if (currentProgress >= 100) {
+            currentProgress = 100;
+            clearInterval(scanInterval);
+            
+            // Complete scan after a moment
+            setTimeout(function() {
+              completeScan();
+            }, 500);
+          }
+          
+          updateProgress(currentProgress);
+          
+          // Update description based on progress
+          if (currentProgress < 30) {
+            scanDescription.textContent = "We're looking for unnecessary files.";
+            scanStepLabel.textContent = "Step 1/2: Quick clean: Files";
+          } else if (currentProgress < 60) {
+            scanDescription.textContent = "Analyzing startup applications...";
+            scanStepLabel.textContent = "Step 1/2: Quick clean: Files";
+          } else {
+            scanDescription.textContent = "Checking for advanced issues...";
+            scanStepLabel.textContent = "Step 2/2: Deep clean";
+          }
+        }, 100);
+      }
+      
+      // Update progress ring
+      function updateProgress(percent) {
+        const circumference = 2 * Math.PI * 174;
+        const offset = circumference - (percent / 100) * circumference;
+        
+        if (scanProgressCircle) {
+          scanProgressCircle.style.strokeDasharray = circumference;
+          scanProgressCircle.style.strokeDashoffset = offset;
+        }
+        
+        if (scanPercentage) {
+          scanPercentage.textContent = Math.round(percent) + '%';
+        }
+      }
+      
+      // Complete scan
+      function completeScan() {
+        stopScan();
+      }
+      
+      // Stop scan
+      function stopScan() {
+        if (scanInterval) {
+          clearInterval(scanInterval);
+          scanInterval = null;
+        }
+        
+        if (scanOverlay) {
+          scanOverlay.classList.remove('active');
+        }
+        
+        // Reset progress
+        currentProgress = 0;
+        updateProgress(0);
+        if (scanDescription) {
+          scanDescription.textContent = "We're looking for unnecessary files.";
+        }
+        if (scanStepLabel) {
+          scanStepLabel.textContent = "Step 1/2: Quick clean: Files";
+        }
+      }
+      
+      // Event listeners
+      if (runScanBtn) {
+        runScanBtn.addEventListener('click', startScan);
+      }
+      
+      if (stopScanBtn) {
+        stopScanBtn.addEventListener('click', stopScan);
+      }
+      
+      // ESC key to stop scan
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && scanOverlay && scanOverlay.classList.contains('active')) {
+          stopScan();
+        }
       });
       
     })();
