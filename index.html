@@ -37,7 +37,11 @@
       --timing-fast: 200ms;
       --timing-normal: 300ms;
       --timing-slow: 400ms;
+      --timing-swap: 500ms;
+      --timing-reveal: 300ms;
+      --stagger-reveal: 100ms;
       --easing: cubic-bezier(0.4, 0, 0.2, 1);
+      --easing-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
     }
 
     /* ========================================
@@ -61,6 +65,19 @@
       to { opacity: 1; }
     }
 
+    /* Unlock reveal animation - fade in + slide up */
+    @keyframes unlockReveal {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Lock disappear animation - fade out + scale down */
     @keyframes lockDisappear {
       from {
         opacity: 1;
@@ -72,6 +89,7 @@
       }
     }
 
+    /* Status dot appear animation */
     @keyframes statusAppear {
       from {
         opacity: 0;
@@ -80,6 +98,18 @@
       to {
         opacity: 1;
         transform: scale(1);
+      }
+    }
+
+    /* Collapse slide up animation */
+    @keyframes collapseSlideUp {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-8px);
       }
     }
 
@@ -95,6 +125,34 @@
     .animate-fade-in {
       animation: fadeIn var(--timing-normal) var(--easing) forwards;
       opacity: 0;
+    }
+
+    /* FLIP animation class for layout swaps */
+    .flip-animating {
+      transition: transform var(--timing-swap) var(--easing-smooth) !important;
+      will-change: transform;
+    }
+
+    /* Unlock reveal animation class */
+    .unlock-reveal {
+      animation: unlockReveal var(--timing-reveal) var(--easing-smooth) forwards;
+      opacity: 0;
+    }
+
+    /* Lock disappearing animation class */
+    .lock-disappearing {
+      animation: lockDisappear var(--timing-reveal) var(--easing-smooth) forwards;
+    }
+
+    /* Status appearing animation class */
+    .status-appearing {
+      animation: statusAppear var(--timing-reveal) var(--easing-smooth) forwards;
+      opacity: 0;
+    }
+
+    /* Collapse animation class */
+    .collapse-animating {
+      animation: collapseSlideUp var(--timing-reveal) var(--easing-smooth) forwards;
     }
 
     /* Staggered animation delays */
@@ -119,8 +177,16 @@
         transition-duration: 0.01ms !important;
       }
       
-      .animate-in, .animate-fade-in {
+      .animate-in, .animate-fade-in, .unlock-reveal {
         animation: fadeIn 0.01ms forwards;
+      }
+      
+      .flip-animating {
+        transition: none !important;
+      }
+      
+      .lock-disappearing, .status-appearing {
+        animation-duration: 0.01ms !important;
       }
     }
 
@@ -559,11 +625,20 @@
       justify-content: space-between;
       padding: 16px;
       cursor: pointer;
-      transition: background var(--timing-fast) var(--easing);
+      transition: background var(--timing-fast) var(--easing),
+                  opacity var(--timing-reveal) var(--easing-smooth),
+                  max-height var(--timing-swap) var(--easing-smooth);
     }
 
     .explore-header:hover {
       background: rgba(0, 0, 0, 0.02);
+    }
+    
+    .explore-header.hiding {
+      opacity: 0;
+      max-height: 0;
+      padding: 0;
+      overflow: hidden;
     }
 
     .explore-title {
@@ -579,7 +654,7 @@
       width: 24px;
       height: 24px;
       fill: #444;
-      transition: transform var(--timing-normal) var(--easing);
+      transition: transform var(--timing-normal) var(--easing-smooth);
       flex-shrink: 0;
     }
 
@@ -596,10 +671,26 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      transition: max-height var(--timing-normal) var(--easing), 
-                  opacity var(--timing-normal) var(--easing);
+      transition: max-height var(--timing-swap) var(--easing-smooth), 
+                  opacity var(--timing-reveal) var(--easing-smooth);
       max-height: 500px;
       opacity: 1;
+    }
+    
+    /* Explore items staggered reveal animation */
+    .explore-items .tool-row {
+      transition: opacity var(--timing-reveal) var(--easing-smooth),
+                  transform var(--timing-reveal) var(--easing-smooth);
+    }
+    
+    .explore-items .tool-row.revealing {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    
+    .explore-items .tool-row.revealed {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .explore-items.collapsed {
@@ -637,7 +728,8 @@
     /* Quick clean section visibility */
     .quick-clean-section {
       display: none;
-        opacity: 0;
+      opacity: 0;
+      transform: translateY(10px);
     }
 
     [data-state="browser-cleaner"] .quick-clean-section {
@@ -646,7 +738,8 @@
 
     .quick-clean-section.visible {
       display: block;
-      animation: fadeSlideUp var(--timing-normal) var(--easing) forwards;
+      animation: fadeSlideUp var(--timing-swap) var(--easing-smooth) forwards;
+      animation-delay: 100ms;
     }
 
     .tool-content {
@@ -1836,15 +1929,22 @@
       // Check for reduced motion preference
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       
-      // Animation timing constants
+      // Animation timing constants (in ms)
       const TIMING = {
         stagger: prefersReducedMotion ? 0 : 60,
-        transition: prefersReducedMotion ? 0 : 300,
+        swap: prefersReducedMotion ? 0 : 500,        // FLIP swap duration
+        reveal: prefersReducedMotion ? 0 : 300,      // Row reveal duration
+        staggerReveal: prefersReducedMotion ? 0 : 100, // Stagger between row reveals
+        lockDisappear: prefersReducedMotion ? 0 : 250,
         fast: prefersReducedMotion ? 0 : 200
       };
       
+      // Easing function
+      const EASING = 'cubic-bezier(0.25, 0.1, 0.25, 1)';
+      
       // Current state
       let currentState = 'dashboard';
+      let isAnimating = false;
       
       // DOM Elements
       const toolsCard = document.getElementById('toolsCard');
@@ -1857,6 +1957,157 @@
       
       // Explore section collapse/expand state
       let isExploreExpanded = true;
+      
+      // ========================================
+      // FLIP Animation Helper
+      // ========================================
+      function flipAnimate(elements, onReorder, onComplete) {
+        if (prefersReducedMotion) {
+          onReorder();
+          if (onComplete) onComplete();
+          return;
+        }
+        
+        // FIRST: Record initial positions
+        const firstRects = new Map();
+        elements.forEach(el => {
+          if (el) firstRects.set(el, el.getBoundingClientRect());
+        });
+        
+        // Execute the reorder
+        onReorder();
+        
+        // LAST: Get final positions
+        const lastRects = new Map();
+        elements.forEach(el => {
+          if (el) lastRects.set(el, el.getBoundingClientRect());
+        });
+        
+        // INVERT: Apply inverse transform
+        elements.forEach(el => {
+          if (!el) return;
+          const first = firstRects.get(el);
+          const last = lastRects.get(el);
+          if (!first || !last) return;
+          
+          const deltaX = first.left - last.left;
+          const deltaY = first.top - last.top;
+          
+          if (deltaX !== 0 || deltaY !== 0) {
+            el.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            el.style.transition = 'none';
+          }
+        });
+        
+        // Force reflow
+        void document.body.offsetHeight;
+        
+        // PLAY: Animate to final position
+        elements.forEach(el => {
+          if (!el) return;
+          el.classList.add('flip-animating');
+          el.style.transform = '';
+        });
+        
+        // Cleanup after animation
+        setTimeout(() => {
+          elements.forEach(el => {
+            if (!el) return;
+            el.classList.remove('flip-animating');
+            el.style.transition = '';
+          });
+          if (onComplete) onComplete();
+        }, TIMING.swap);
+      }
+      
+      // ========================================
+      // Staggered Reveal for Locked Rows
+      // ========================================
+      function revealLockedRows(rows, onComplete) {
+        if (prefersReducedMotion) {
+          rows.forEach(row => {
+            row.style.opacity = '1';
+            row.style.transform = '';
+          });
+          if (onComplete) onComplete();
+          return;
+        }
+        
+        // First, set initial state (hidden, translated down)
+        rows.forEach(row => {
+          row.style.opacity = '0';
+          row.style.transform = 'translateY(10px)';
+          row.style.transition = 'none';
+        });
+        
+        // Force reflow
+        void document.body.offsetHeight;
+        
+        // Staggered reveal
+        rows.forEach((row, index) => {
+          setTimeout(() => {
+            row.style.transition = `opacity ${TIMING.reveal}ms ${EASING}, transform ${TIMING.reveal}ms ${EASING}`;
+            row.style.opacity = '1';
+            row.style.transform = 'translateY(0)';
+          }, index * TIMING.staggerReveal);
+        });
+        
+        // Cleanup after all animations
+        const totalDuration = rows.length * TIMING.staggerReveal + TIMING.reveal;
+        setTimeout(() => {
+          rows.forEach(row => {
+            row.style.transition = '';
+            row.style.opacity = '';
+            row.style.transform = '';
+          });
+          if (onComplete) onComplete();
+        }, totalDuration);
+      }
+      
+      // ========================================
+      // Animate Lock Disappear
+      // ========================================
+      function animateLockDisappear(lock, onComplete) {
+        if (!lock) {
+          if (onComplete) onComplete();
+          return;
+        }
+        
+        if (prefersReducedMotion) {
+          lock.style.display = 'none';
+          if (onComplete) onComplete();
+          return;
+        }
+        
+        lock.classList.add('lock-disappearing');
+        
+        setTimeout(() => {
+          lock.style.display = 'none';
+          lock.classList.remove('lock-disappearing');
+          if (onComplete) onComplete();
+        }, TIMING.lockDisappear);
+      }
+      
+      // ========================================
+      // Animate Status Appear
+      // ========================================
+      function animateStatusAppear(status) {
+        if (!status) return;
+        
+        status.style.display = 'block';
+        
+        if (prefersReducedMotion) {
+          status.style.opacity = '1';
+          return;
+        }
+        
+        status.classList.add('status-appearing');
+        
+        setTimeout(() => {
+          status.classList.remove('status-appearing');
+          status.style.opacity = '1';
+        }, TIMING.reveal);
+      }
       
       // ========================================
       // Initial Page Load Animation
@@ -1878,213 +2129,254 @@
       // Transition to Browser Cleaner State
       // ========================================
       function transitionToBrowserCleaner() {
-        if (currentState === 'browser-cleaner') return;
+        if (currentState === 'browser-cleaner' || isAnimating) return;
         currentState = 'browser-cleaner';
+        isAnimating = true;
         
         const startupManagerRow = document.querySelector('[data-tool="startup-manager"]');
         const uninstallerRow = document.querySelector('[data-tool="uninstaller"]');
         const fileCleanupRow = document.querySelector('[data-tool="file-cleanup"]');
         
-        // Step 1: Animate locks disappearing
-        const locks = document.querySelectorAll('.locked-lock');
-        locks.forEach((lock, index) => {
-          setTimeout(() => {
-            lock.classList.add('animate-disappear');
-          }, index * 50);
-        });
+        // Get all locked rows (rows with locks)
+        const lockedRows = Array.from(document.querySelectorAll('.locked-lock')).map(lock => lock.closest('.tool-row'));
+        const allLocks = document.querySelectorAll('.locked-lock');
+        const allStatuses = document.querySelectorAll('.locked-status');
         
-        // Browser cleaner lock
-        if (browserCleanerLock) {
-          browserCleanerLock.classList.add('animate-disappear');
+        // Step 1: Hide explore header and divider first
+        if (exploreHeader) {
+          exploreHeader.classList.add('hiding');
         }
         
-        // Step 2: After locks disappear, show status dots
-        setTimeout(() => {
-          // Hide locks completely
-          locks.forEach(lock => {
-            lock.style.display = 'none';
-          });
-          if (browserCleanerLock) {
-            browserCleanerLock.style.display = 'none';
-          }
-          
-          // Show status dots
-          const statuses = document.querySelectorAll('.locked-status');
-          statuses.forEach((status, index) => {
-            setTimeout(() => {
-              status.style.display = 'block';
-              status.classList.add('animate-appear');
-            }, index * 50);
-          });
-          
-          if (browserCleanerStatus) {
-            browserCleanerStatus.style.display = 'block';
-            browserCleanerStatus.classList.add('animate-appear');
-          }
-          
-        }, TIMING.transition);
+        const exploreDivider = exploreHeader ? exploreHeader.previousElementSibling : null;
+        if (exploreDivider && exploreDivider.classList.contains('tools-divider')) {
+          exploreDivider.style.opacity = '0';
+          exploreDivider.style.height = '0';
+          exploreDivider.style.transition = `all ${TIMING.fast}ms ${EASING}`;
+        }
         
-        // Step 3: Hide explore header, divider, and reorder elements
+        // Step 2: Start Browser Cleaner lock disappear
+        animateLockDisappear(browserCleanerLock, () => {
+          animateStatusAppear(browserCleanerStatus);
+        });
+        
+        // Step 3: After a brief delay, do the FLIP layout swap
         setTimeout(() => {
-          // Hide explore header
-          if (exploreHeader) {
-            exploreHeader.style.opacity = '0';
-            exploreHeader.style.height = '0';
-            exploreHeader.style.padding = '0';
-            exploreHeader.style.overflow = 'hidden';
-            exploreHeader.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
-          }
-          
-          // Hide explore items container (we'll move items out of it)
+          // Hide explore items container so items flow into main container
           if (exploreItems) {
             exploreItems.style.display = 'contents';
           }
           
-          // Hide the divider before explore section
-          const exploreDivider = exploreHeader ? exploreHeader.previousElementSibling : null;
-          if (exploreDivider && exploreDivider.classList.contains('tools-divider')) {
-            exploreDivider.style.opacity = '0';
-            exploreDivider.style.height = '0';
-            exploreDivider.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
-          }
+          // FLIP animate the swap: Browser Cleaner ↔ Startup Manager
+          const elementsToFlip = [browserCleanerRow, startupManagerRow];
           
-          // Reorder elements for Browser Cleaner state:
-          // 1. File Cleanup
-          // 2. Browser Cleaner (moves up)
-          // 3. Quick Clean section
-          // 4. Startup Manager (moves down, above Uninstaller)
-          // 5. Uninstaller, etc.
-          
-          // Move Browser Cleaner after File Cleanup
-          if (browserCleanerRow && fileCleanupRow) {
-            browserCleanerRow.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
-            fileCleanupRow.parentNode.insertBefore(browserCleanerRow, fileCleanupRow.nextSibling);
-          }
-          
-          // Show quick clean section (it will be after Browser Cleaner)
-          if (quickCleanSection) {
-            quickCleanSection.classList.add('visible');
-            // Move quick clean section after Browser Cleaner
-            if (browserCleanerRow) {
+          flipAnimate(elementsToFlip, () => {
+            // Move Browser Cleaner after File Cleanup
+            if (browserCleanerRow && fileCleanupRow) {
+              fileCleanupRow.parentNode.insertBefore(browserCleanerRow, fileCleanupRow.nextSibling);
+            }
+            
+            // Show and move quick clean section after Browser Cleaner
+            if (quickCleanSection && browserCleanerRow) {
+              quickCleanSection.classList.add('visible');
               browserCleanerRow.parentNode.insertBefore(quickCleanSection, browserCleanerRow.nextSibling);
             }
-          }
-          
-          // Move Startup Manager to be right after quick clean section (above Uninstaller)
-          if (startupManagerRow && quickCleanSection && uninstallerRow) {
-            startupManagerRow.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
-            quickCleanSection.parentNode.insertBefore(startupManagerRow, quickCleanSection.nextSibling);
-          }
-          
-        }, TIMING.transition + 100);
-        
-        // Update card state
-        setTimeout(() => {
-          toolsCard.setAttribute('data-state', 'browser-cleaner');
-        }, TIMING.transition + 200);
+            
+            // Move Startup Manager after quick clean section
+            if (startupManagerRow && quickCleanSection) {
+              quickCleanSection.parentNode.insertBefore(startupManagerRow, quickCleanSection.nextSibling);
+            }
+          }, () => {
+            // After swap completes, reveal locked rows with staggered animation
+            // Also animate their locks disappearing and statuses appearing
+            
+            allLocks.forEach((lock, index) => {
+              setTimeout(() => {
+                animateLockDisappear(lock);
+              }, index * TIMING.staggerReveal);
+            });
+            
+            allStatuses.forEach((status, index) => {
+              setTimeout(() => {
+                animateStatusAppear(status);
+              }, index * TIMING.staggerReveal + TIMING.lockDisappear);
+            });
+            
+            // Reveal the locked rows with staggered animation
+            revealLockedRows(lockedRows, () => {
+              toolsCard.setAttribute('data-state', 'browser-cleaner');
+              isAnimating = false;
+            });
+          });
+        }, TIMING.fast);
       }
       
       // ========================================
       // Transition back to Dashboard State
       // ========================================
       function transitionToDashboard() {
-        if (currentState === 'dashboard') return;
+        if (currentState === 'dashboard' || isAnimating) return;
         currentState = 'dashboard';
+        isAnimating = true;
         
         const startupManagerRow = document.querySelector('[data-tool="startup-manager"]');
         const fileCleanupRow = document.querySelector('[data-tool="file-cleanup"]');
         const uninstallerRow = document.querySelector('[data-tool="uninstaller"]');
         
-        // Reset everything
-        toolsCard.setAttribute('data-state', 'dashboard');
-        
-        // Hide quick clean
+        // Hide quick clean first
         if (quickCleanSection) {
           quickCleanSection.classList.remove('visible');
         }
         
-        // Show explore header
-        if (exploreHeader) {
-          exploreHeader.style.opacity = '';
-          exploreHeader.style.height = '';
-          exploreHeader.style.padding = '';
-          exploreHeader.style.overflow = '';
-          exploreHeader.style.transition = '';
+        // FLIP animate back to original positions
+        const elementsToFlip = [browserCleanerRow, startupManagerRow];
+        
+        flipAnimate(elementsToFlip, () => {
+          // Move Startup Manager back to position 2 (after File Cleanup)
+          if (startupManagerRow && fileCleanupRow) {
+            fileCleanupRow.parentNode.insertBefore(startupManagerRow, fileCleanupRow.nextSibling);
+          }
+          
+          // Get the divider
+          const exploreDivider = document.querySelector('.tools-card > .tools-divider');
+          
+          // Move the divider to after Startup Manager
+          if (exploreDivider && startupManagerRow) {
+            startupManagerRow.parentNode.insertBefore(exploreDivider, startupManagerRow.nextSibling);
+          }
+          
+          // Move explore header to after divider
+          if (exploreHeader && exploreDivider) {
+            exploreDivider.parentNode.insertBefore(exploreHeader, exploreDivider.nextSibling);
+          }
+          
+          // Move Browser Cleaner back inside explore items (after explore header)
+          if (browserCleanerRow && exploreItems) {
+            exploreItems.insertBefore(browserCleanerRow, exploreItems.firstChild);
+          }
+          
+          // Move quick clean section back after Browser Cleaner
+          if (quickCleanSection && browserCleanerRow) {
+            browserCleanerRow.parentNode.insertBefore(quickCleanSection, browserCleanerRow.nextSibling);
+          }
+        }, () => {
+          // Restore explore items container
+          if (exploreItems) {
+            exploreItems.style.display = '';
+          }
+          
+          // Show explore header
+          if (exploreHeader) {
+            exploreHeader.classList.remove('hiding');
+            exploreHeader.classList.remove('collapsed');
+            exploreHeader.classList.add('expanded');
+          }
+          isExploreExpanded = true;
+          
+          // Show the divider
+          const exploreDivider = document.querySelector('.tools-card > .tools-divider');
+          if (exploreDivider) {
+            exploreDivider.style.opacity = '';
+            exploreDivider.style.height = '';
+            exploreDivider.style.transition = '';
+          }
+          
+          // Reset status dots and locks
+          const allStatuses = document.querySelectorAll('.locked-status');
+          allStatuses.forEach(status => {
+            status.style.display = 'none';
+            status.style.opacity = '';
+            status.classList.remove('status-appearing');
+          });
+          
+          if (browserCleanerStatus) {
+            browserCleanerStatus.style.display = 'none';
+            browserCleanerStatus.style.opacity = '';
+            browserCleanerStatus.classList.remove('status-appearing');
+          }
+          
+          const allLocks = document.querySelectorAll('.locked-lock');
+          allLocks.forEach(lock => {
+            lock.style.display = '';
+            lock.classList.remove('lock-disappearing');
+          });
+          
+          if (browserCleanerLock) {
+            browserCleanerLock.style.display = '';
+            browserCleanerLock.classList.remove('lock-disappearing');
+          }
+          
+          toolsCard.setAttribute('data-state', 'dashboard');
+          isAnimating = false;
+        });
+      }
+      
+      // ========================================
+      // Expand/Collapse with Staggered Animation
+      // ========================================
+      function toggleExploreSection() {
+        if (currentState === 'browser-cleaner' || isAnimating) return;
+        
+        isExploreExpanded = !isExploreExpanded;
+        
+        const rows = exploreItems.querySelectorAll('.tool-row');
+        
+        if (isExploreExpanded) {
+          // Expanding
           exploreHeader.classList.remove('collapsed');
           exploreHeader.classList.add('expanded');
-        }
-        
-        // Reset explore items container
-        if (exploreItems) {
-          exploreItems.style.display = '';
           exploreItems.classList.remove('collapsed');
-        }
-        isExploreExpanded = true;
-        
-        // Show the divider before explore section
-        const exploreDivider = document.querySelector('.tools-card > .tools-divider');
-        if (exploreDivider) {
-          exploreDivider.style.opacity = '';
-          exploreDivider.style.height = '';
-          exploreDivider.style.transition = '';
-        }
-        
-        // Hide status dots, show locks
-        const statuses = document.querySelectorAll('.locked-status');
-        statuses.forEach(status => {
-          status.style.display = 'none';
-          status.classList.remove('animate-appear');
-        });
-        
-        if (browserCleanerStatus) {
-          browserCleanerStatus.style.display = 'none';
-          browserCleanerStatus.classList.remove('animate-appear');
-        }
-        
-        const locks = document.querySelectorAll('.locked-lock');
-        locks.forEach(lock => {
-          lock.style.display = '';
-          lock.classList.remove('animate-disappear');
-        });
-        
-        if (browserCleanerLock) {
-          browserCleanerLock.style.display = '';
-          browserCleanerLock.classList.remove('animate-disappear');
-        }
-        
-        // Restore original order:
-        // 1. File Cleanup
-        // 2. Startup Manager (move back to after File Cleanup)
-        // 3. Divider
-        // 4. Explore header
-        // 5. Browser Cleaner (move back to after Explore header)
-        // 6. Uninstaller, etc.
-        
-        // Move Startup Manager back to position 2 (after File Cleanup)
-        if (startupManagerRow && fileCleanupRow) {
-          startupManagerRow.style.transition = '';
-          fileCleanupRow.parentNode.insertBefore(startupManagerRow, fileCleanupRow.nextSibling);
-        }
-        
-        // Move the divider to after Startup Manager
-        if (exploreDivider && startupManagerRow) {
-          startupManagerRow.parentNode.insertBefore(exploreDivider, startupManagerRow.nextSibling);
-        }
-        
-        // Move explore header to after divider
-        if (exploreHeader && exploreDivider) {
-          exploreDivider.parentNode.insertBefore(exploreHeader, exploreDivider.nextSibling);
-        }
-        
-        // Move Browser Cleaner back to after explore header
-        if (browserCleanerRow && exploreHeader) {
-          browserCleanerRow.style.transition = '';
-          exploreHeader.parentNode.insertBefore(browserCleanerRow, exploreHeader.nextSibling);
-        }
-        
-        // Move quick clean section back to after Browser Cleaner
-        if (quickCleanSection && browserCleanerRow) {
-          browserCleanerRow.parentNode.insertBefore(quickCleanSection, browserCleanerRow.nextSibling);
+          
+          // Staggered reveal
+          if (!prefersReducedMotion) {
+            rows.forEach((row, index) => {
+              row.style.opacity = '0';
+              row.style.transform = 'translateY(10px)';
+              
+              setTimeout(() => {
+                row.style.transition = `opacity ${TIMING.reveal}ms ${EASING}, transform ${TIMING.reveal}ms ${EASING}`;
+                row.style.opacity = '1';
+                row.style.transform = 'translateY(0)';
+              }, index * TIMING.staggerReveal);
+            });
+            
+            // Cleanup
+            const totalDuration = rows.length * TIMING.staggerReveal + TIMING.reveal;
+            setTimeout(() => {
+              rows.forEach(row => {
+                row.style.transition = '';
+                row.style.opacity = '';
+                row.style.transform = '';
+              });
+            }, totalDuration);
+          }
+        } else {
+          // Collapsing - fade out + slide up, then collapse
+          exploreHeader.classList.remove('expanded');
+          exploreHeader.classList.add('collapsed');
+          
+          if (!prefersReducedMotion) {
+            // Animate rows out in reverse order
+            const reversedRows = Array.from(rows).reverse();
+            reversedRows.forEach((row, index) => {
+              setTimeout(() => {
+                row.style.transition = `opacity ${TIMING.fast}ms ${EASING}, transform ${TIMING.fast}ms ${EASING}`;
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(-8px)';
+              }, index * 50);
+            });
+            
+            // After rows animate out, collapse the container
+            setTimeout(() => {
+              exploreItems.classList.add('collapsed');
+              rows.forEach(row => {
+                row.style.transition = '';
+                row.style.opacity = '';
+                row.style.transform = '';
+              });
+            }, rows.length * 50 + TIMING.fast);
+          } else {
+            exploreItems.classList.add('collapsed');
+          }
         }
       }
       
@@ -2103,20 +2395,7 @@
       // Explore header toggle (collapse/expand items)
       if (exploreHeader && exploreItems) {
         exploreHeader.addEventListener('click', function(e) {
-          // Don't toggle if we're in browser-cleaner state
-          if (currentState === 'browser-cleaner') return;
-          
-          isExploreExpanded = !isExploreExpanded;
-          
-          if (isExploreExpanded) {
-            this.classList.remove('collapsed');
-            this.classList.add('expanded');
-            exploreItems.classList.remove('collapsed');
-          } else {
-            this.classList.remove('expanded');
-            this.classList.add('collapsed');
-            exploreItems.classList.add('collapsed');
-          }
+          toggleExploreSection();
         });
       }
       
