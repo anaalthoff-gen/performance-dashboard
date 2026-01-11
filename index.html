@@ -1525,6 +1525,10 @@
         if (currentState === 'browser-cleaner') return;
         currentState = 'browser-cleaner';
         
+        const startupManagerRow = document.querySelector('[data-tool="startup-manager"]');
+        const uninstallerRow = document.querySelector('[data-tool="uninstaller"]');
+        const fileCleanupRow = document.querySelector('[data-tool="file-cleanup"]');
+        
         // Step 1: Animate locks disappearing
         const locks = document.querySelectorAll('.locked-lock');
         locks.forEach((lock, index) => {
@@ -1564,7 +1568,7 @@
           
         }, TIMING.transition);
         
-        // Step 3: Hide explore header, divider, and reorder
+        // Step 3: Hide explore header, divider, and reorder elements
         setTimeout(() => {
           // Hide explore header
           if (exploreHeader) {
@@ -1572,6 +1576,7 @@
             exploreHeader.style.height = '0';
             exploreHeader.style.padding = '0';
             exploreHeader.style.overflow = 'hidden';
+            exploreHeader.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
           }
           
           // Hide the divider before explore section
@@ -1579,18 +1584,35 @@
           if (exploreDivider && exploreDivider.classList.contains('tools-divider')) {
             exploreDivider.style.opacity = '0';
             exploreDivider.style.height = '0';
+            exploreDivider.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
           }
           
-          // Move browser cleaner row up (after File Cleanup)
-          const fileCleanupRow = document.querySelector('[data-tool="file-cleanup"]');
+          // Reorder elements for Browser Cleaner state:
+          // 1. File Cleanup
+          // 2. Browser Cleaner (moves up)
+          // 3. Quick Clean section
+          // 4. Startup Manager (moves down, above Uninstaller)
+          // 5. Uninstaller, etc.
+          
+          // Move Browser Cleaner after File Cleanup
           if (browserCleanerRow && fileCleanupRow) {
-            browserCleanerRow.style.transition = 'transform ' + TIMING.transition + 'ms var(--easing)';
+            browserCleanerRow.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
             fileCleanupRow.parentNode.insertBefore(browserCleanerRow, fileCleanupRow.nextSibling);
           }
           
-          // Show quick clean section
+          // Show quick clean section (it will be after Browser Cleaner)
           if (quickCleanSection) {
             quickCleanSection.classList.add('visible');
+            // Move quick clean section after Browser Cleaner
+            if (browserCleanerRow) {
+              browserCleanerRow.parentNode.insertBefore(quickCleanSection, browserCleanerRow.nextSibling);
+            }
+          }
+          
+          // Move Startup Manager to be right after quick clean section (above Uninstaller)
+          if (startupManagerRow && quickCleanSection && uninstallerRow) {
+            startupManagerRow.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
+            quickCleanSection.parentNode.insertBefore(startupManagerRow, quickCleanSection.nextSibling);
           }
           
         }, TIMING.transition + 100);
@@ -1608,6 +1630,10 @@
         if (currentState === 'dashboard') return;
         currentState = 'dashboard';
         
+        const startupManagerRow = document.querySelector('[data-tool="startup-manager"]');
+        const fileCleanupRow = document.querySelector('[data-tool="file-cleanup"]');
+        const uninstallerRow = document.querySelector('[data-tool="uninstaller"]');
+        
         // Reset everything
         toolsCard.setAttribute('data-state', 'dashboard');
         
@@ -1622,13 +1648,15 @@
           exploreHeader.style.height = '';
           exploreHeader.style.padding = '';
           exploreHeader.style.overflow = '';
+          exploreHeader.style.transition = '';
         }
         
         // Show the divider before explore section
-        const exploreDivider = exploreHeader ? exploreHeader.previousElementSibling : null;
-        if (exploreDivider && exploreDivider.classList.contains('tools-divider')) {
+        const exploreDivider = document.querySelector('.tools-card > .tools-divider');
+        if (exploreDivider) {
           exploreDivider.style.opacity = '';
           exploreDivider.style.height = '';
+          exploreDivider.style.transition = '';
         }
         
         // Hide status dots, show locks
@@ -1654,9 +1682,39 @@
           browserCleanerLock.classList.remove('animate-disappear');
         }
         
-        // Move browser cleaner back to original position (after explore header)
+        // Restore original order:
+        // 1. File Cleanup
+        // 2. Startup Manager (move back to after File Cleanup)
+        // 3. Divider
+        // 4. Explore header
+        // 5. Browser Cleaner (move back to after Explore header)
+        // 6. Uninstaller, etc.
+        
+        // Move Startup Manager back to position 2 (after File Cleanup)
+        if (startupManagerRow && fileCleanupRow) {
+          startupManagerRow.style.transition = '';
+          fileCleanupRow.parentNode.insertBefore(startupManagerRow, fileCleanupRow.nextSibling);
+        }
+        
+        // Move the divider to after Startup Manager
+        if (exploreDivider && startupManagerRow) {
+          startupManagerRow.parentNode.insertBefore(exploreDivider, startupManagerRow.nextSibling);
+        }
+        
+        // Move explore header to after divider
+        if (exploreHeader && exploreDivider) {
+          exploreDivider.parentNode.insertBefore(exploreHeader, exploreDivider.nextSibling);
+        }
+        
+        // Move Browser Cleaner back to after explore header
         if (browserCleanerRow && exploreHeader) {
+          browserCleanerRow.style.transition = '';
           exploreHeader.parentNode.insertBefore(browserCleanerRow, exploreHeader.nextSibling);
+        }
+        
+        // Move quick clean section back to after Browser Cleaner
+        if (quickCleanSection && browserCleanerRow) {
+          browserCleanerRow.parentNode.insertBefore(quickCleanSection, browserCleanerRow.nextSibling);
         }
       }
       
