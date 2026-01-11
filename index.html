@@ -19,6 +19,7 @@
       --color-on-desktop-menu-secondary: rgba(255, 255, 255, 0.75);
       --color-brand: #FEEB29;
       --color-success: #007644;
+      --color-warning: #FFBF00;
       --color-surface: #ffffff;
       --color-background: #FBFAF9;
       --color-on-surface: #242424;
@@ -31,6 +32,96 @@
       /* Shadows */
       --shadow-tile: 0px 1px 4px 0px rgba(95, 79, 58, 0.4);
       --shadow-window: 0px 32px 64px 0px rgba(0, 0, 0, 0.28), 0px 2px 21px 0px rgba(0, 0, 0, 0.22);
+      
+      /* Animation Timing */
+      --timing-fast: 200ms;
+      --timing-normal: 300ms;
+      --timing-slow: 400ms;
+      --easing: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ========================================
+       ANIMATION STYLES
+       ======================================== */
+    
+    /* Initial load animation */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes lockDisappear {
+      from {
+        opacity: 1;
+        transform: scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: scale(0.7);
+      }
+    }
+
+    @keyframes statusAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .animate-in {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .animate-in.animate-in-active {
+      animation: fadeSlideUp var(--timing-normal) var(--easing) forwards;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn var(--timing-normal) var(--easing) forwards;
+      opacity: 0;
+    }
+
+    /* Staggered animation delays */
+    .animate-in[style*="--delay: 0"] { animation-delay: 0ms; }
+    .animate-in[style*="--delay: 1"] { animation-delay: 60ms; }
+    .animate-in[style*="--delay: 2"] { animation-delay: 120ms; }
+    .animate-in[style*="--delay: 3"] { animation-delay: 180ms; }
+    .animate-in[style*="--delay: 4"] { animation-delay: 240ms; }
+    .animate-in[style*="--delay: 5"] { animation-delay: 300ms; }
+    .animate-in[style*="--delay: 6"] { animation-delay: 360ms; }
+    .animate-in[style*="--delay: 7"] { animation-delay: 420ms; }
+    .animate-in[style*="--delay: 8"] { animation-delay: 480ms; }
+    .animate-in[style*="--delay: 9"] { animation-delay: 540ms; }
+    .animate-in[style*="--delay: 10"] { animation-delay: 600ms; }
+    .animate-in[style*="--delay: 11"] { animation-delay: 660ms; }
+
+    /* Reduce motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .animate-in, .animate-fade-in {
+        animation: fadeIn 0.01ms forwards;
+      }
     }
 
     * {
@@ -293,7 +384,7 @@
       position: relative;
       flex-shrink: 0;
     }
-
+    
     .header-badge img {
       width: 100%;
       height: 100%;
@@ -429,6 +520,115 @@
       height: 10px;
       background: #388700;
       border-radius: 50%;
+      transition: opacity var(--timing-normal) var(--easing), transform var(--timing-normal) var(--easing);
+    }
+
+    .tool-badge-status.animate-appear {
+      animation: statusAppear var(--timing-normal) var(--easing) forwards;
+    }
+
+    /* Lock Icon */
+    .tool-badge-lock {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 16px;
+      height: 16px;
+      background: var(--color-warning);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity var(--timing-normal) var(--easing), transform var(--timing-normal) var(--easing);
+    }
+
+    .tool-badge-lock svg {
+      width: 10px;
+      height: 10px;
+      fill: #242424;
+    }
+
+    .tool-badge-lock.animate-disappear {
+      animation: lockDisappear var(--timing-normal) var(--easing) forwards;
+    }
+
+    /* Explore Section Header */
+    .explore-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 8px 16px;
+      cursor: pointer;
+      transition: background var(--timing-fast) var(--easing);
+    }
+
+    .explore-header:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .explore-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #444;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .explore-chevron {
+      width: 24px;
+      height: 24px;
+      fill: #444;
+      transition: transform var(--timing-normal) var(--easing);
+    }
+
+    .explore-header.collapsed .explore-chevron {
+      transform: rotate(0deg);
+    }
+
+    .explore-header.expanded .explore-chevron {
+      transform: rotate(90deg);
+    }
+
+    /* Tool row transitions */
+    .tool-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background var(--timing-fast) var(--easing), 
+                  opacity var(--timing-normal) var(--easing),
+                  transform var(--timing-normal) var(--easing);
+      border-radius: 8px;
+    }
+
+    .tool-row.clickable:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .tool-row.hidden {
+      display: none;
+    }
+
+    /* State management */
+    [data-state="dashboard"] .browser-cleaner-state,
+    [data-state="browser-cleaner"] .dashboard-state {
+      display: none;
+    }
+
+    /* Quick clean section visibility */
+    .quick-clean-section {
+      display: none;
+        opacity: 0;
+    }
+
+    [data-state="browser-cleaner"] .quick-clean-section {
+      display: block;
+    }
+
+    .quick-clean-section.visible {
+      display: block;
+      animation: fadeSlideUp var(--timing-normal) var(--easing) forwards;
     }
 
     .tool-content {
@@ -444,7 +644,7 @@
       line-height: 24px;
       letter-spacing: -0.3px;
     }
-
+    
     .tool-subtitle {
       font-size: 13px;
       font-weight: 500;
@@ -472,7 +672,7 @@
       height: 24px;
       fill: #444;
     }
-
+    
     /* Quick Clean Section */
     .quick-clean-row {
       display: flex;
@@ -561,7 +761,7 @@
       height: 20px;
       cursor: pointer;
     }
-
+    
     .chart-area {
       height: 128px;
       position: relative;
@@ -583,7 +783,7 @@
       justify-content: flex-end;
       align-items: center;
     }
-
+    
     .bar-fill {
       width: 16px;
       background: #004eae;
@@ -661,7 +861,7 @@
       align-items: center;
       justify-content: center;
     }
-
+    
     .addons-icon-bg {
       position: absolute;
       width: 26.25px;
@@ -722,7 +922,7 @@
       flex: 1;
       height: 100%;
     }
-
+    
     .addon-tile-text {
       display: flex;
       flex-direction: column;
@@ -735,7 +935,7 @@
       align-items: center;
       gap: 4px;
     }
-
+    
     .addon-tile-title {
       font-size: 15px;
       font-weight: 700;
@@ -743,7 +943,7 @@
       line-height: 24px;
       letter-spacing: -0.3px;
     }
-
+    
     .addon-tile-label {
       display: inline-flex;
       align-items: center;
@@ -756,7 +956,7 @@
       line-height: 16px;
       letter-spacing: -0.3px;
     }
-
+    
     .addon-tile-subtitle {
       font-size: 13px;
       font-weight: 500;
@@ -968,25 +1168,25 @@
           <div style="display: flex; gap: 8px; align-items: center; flex: 1;">
             <div class="header-badge">
               <img src="Assets/icons/Performance Pillar/Changes in statuses/Header Badge.svg" alt="Performance badge">
-            </div>
+          </div>
             <div class="header-text">
               <h1 class="header-title">Performance</h1>
               <p class="header-subtitle">Last Scan: 2 days ago</p>
-            </div>
-          </div>
-          <button class="scan-btn">Run Performance Scan</button>
         </div>
+        </div>
+          <button class="scan-btn">Run Performance Scan</button>
+          </div>
 
         <!-- Performance Tools Card -->
-        <div class="tools-card">
+        <div class="tools-card" id="toolsCard" data-state="dashboard">
           <!-- Header -->
-          <div class="tools-header">
+          <div class="tools-header animate-in" style="--delay: 0">
             <span class="tools-header-title">Performance tools running</span>
             <span class="tools-header-label">Scanned items</span>
           </div>
 
-          <!-- File Cleanup -->
-          <div class="tool-row">
+          <!-- File Cleanup (always visible, always unlocked) -->
+          <div class="tool-row clickable animate-in" data-tool="file-cleanup" style="--delay: 1">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1011,16 +1211,20 @@
             </div>
           </div>
 
-          <!-- Browser Cleaner -->
-          <div class="tool-row">
+          <!-- Browser Cleaner (moves up after unlock) -->
+          <div class="tool-row clickable animate-in browser-cleaner-row" data-tool="browser-cleaner" id="browserCleanerRow" style="--delay: 5">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 16H13V18H11V16ZM11 6H13V14H11V6Z"/>
+                  <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z"/>
+                  <circle cx="12" cy="12" r="4"/>
                 </svg>
               </div>
-              <div class="tool-badge-status"></div>
+              <div class="tool-badge-status" id="browserCleanerStatus" style="display: none;"></div>
+              <div class="tool-badge-lock" id="browserCleanerLock">
+                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+              </div>
             </div>
             <div class="tool-content">
               <span class="tool-title">Browser cleaner</span>
@@ -1034,16 +1238,17 @@
             </div>
           </div>
 
-          <!-- Quick Clean Row -->
-          <div class="quick-clean-row">
-            <span class="quick-clean-text">Total of 1,962 MB (3,204 items) to clean</span>
-            <button class="quick-clean-btn">Quick clean</button>
+          <!-- Quick Clean Section (visible after browser cleaner activated) -->
+          <div class="quick-clean-section" id="quickCleanSection">
+            <div class="quick-clean-row">
+              <span class="quick-clean-text">Total of 1,962 MB (3,204 items) to clean</span>
+              <button class="quick-clean-btn">Quick clean</button>
+            </div>
+            <div class="tools-divider"></div>
           </div>
 
-          <div class="tools-divider"></div>
-
-          <!-- Startup Manager -->
-          <div class="tool-row">
+          <!-- Startup Manager (always visible, always unlocked) -->
+          <div class="tool-row clickable animate-in" data-tool="startup-manager" style="--delay: 2">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1066,16 +1271,27 @@
             </div>
           </div>
 
+          <!-- Explore More Section Header (Dashboard state only) -->
+          <div class="explore-header expanded animate-in dashboard-state" id="exploreHeader" style="--delay: 3">
+            <span class="explore-title">Explore more ways to improve performance</span>
+            <svg class="explore-chevron" viewBox="0 0 24 24">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+
           <!-- Uninstaller -->
-          <div class="tool-row">
+          <div class="tool-row clickable animate-in" data-tool="uninstaller" style="--delay: 6">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM12 6L16 12H13V18H11V12H8L12 6Z"/>
+                  <path d="M5 4h14v2H5V4zm0 4h14v12c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V8zm3 2v8h2v-8H8zm4 0v8h2v-8h-2z"/>
                 </svg>
               </div>
-              <div class="tool-badge-status"></div>
+              <div class="tool-badge-status locked-status" style="display: none;"></div>
+              <div class="tool-badge-lock locked-lock">
+                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+              </div>
             </div>
             <div class="tool-content">
               <span class="tool-title">Uninstaller</span>
@@ -1090,7 +1306,7 @@
           </div>
 
           <!-- Duplicate Finder -->
-          <div class="tool-row">
+          <div class="tool-row clickable animate-in" data-tool="duplicate-finder" style="--delay: 7">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1098,7 +1314,10 @@
                   <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z"/>
                 </svg>
               </div>
-              <div class="tool-badge-status"></div>
+              <div class="tool-badge-status locked-status" style="display: none;"></div>
+              <div class="tool-badge-lock locked-lock">
+                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+              </div>
             </div>
             <div class="tool-content">
               <span class="tool-title">Duplicate finder</span>
@@ -1113,7 +1332,7 @@
           </div>
 
           <!-- Photo Cleaner -->
-          <div class="tool-row">
+          <div class="tool-row clickable animate-in" data-tool="photo-cleaner" style="--delay: 8">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1121,7 +1340,10 @@
                   <path d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z"/>
                 </svg>
               </div>
-              <div class="tool-badge-status"></div>
+              <div class="tool-badge-status locked-status" style="display: none;"></div>
+              <div class="tool-badge-lock locked-lock">
+                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
+              </div>
             </div>
             <div class="tool-content">
               <span class="tool-title">Photo Cleaner</span>
@@ -1136,13 +1358,17 @@
           </div>
 
           <!-- Cloud Drive Cleaner -->
-          <div class="tool-row">
+          <div class="tool-row clickable animate-in" data-tool="cloud-drive" style="--delay: 9">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4C9.11 4 6.6 5.64 5.35 8.04C2.34 8.36 0 10.91 0 14C0 17.31 2.69 20 6 20H19C21.76 20 24 17.76 24 15C24 12.36 21.95 10.22 19.35 10.04ZM19 18H6C3.79 18 2 16.21 2 14C2 11.95 3.53 10.24 5.56 10.03L6.63 9.92L7.13 8.97C8.08 7.14 9.94 6 12 6C14.62 6 16.88 7.86 17.39 10.43L17.69 11.93L19.22 12.04C20.78 12.14 22 13.45 22 15C22 16.65 20.65 18 19 18Z"/>
                 </svg>
+              </div>
+              <div class="tool-badge-status locked-status" style="display: none;"></div>
+              <div class="tool-badge-lock locked-lock">
+                <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>
               </div>
             </div>
             <div class="tool-content">
@@ -1158,7 +1384,7 @@
         </div>
 
         <!-- What You Have Cleaned Chart -->
-        <div class="data-card">
+        <div class="data-card animate-in" style="--delay: 10">
           <div class="data-header">
             <span class="data-title">What you have cleaned so far</span>
             <span class="data-subtitle">8GB in the last 6 months</span>
@@ -1166,31 +1392,31 @@
               <circle cx="12" cy="12" r="10"/>
               <line x1="12" y1="16" x2="12" y2="12"/>
               <line x1="12" y1="8" x2="12.01" y2="8"/>
-            </svg>
-          </div>
+                      </svg>
+                  </div>
           <div class="chart-area">
             <div class="chart-bars">
               <div class="chart-bar">
                 <div class="bar-fill" style="height: 70px;"></div>
-              </div>
+                </div>
               <div class="chart-bar">
                 <div class="bar-fill" style="height: 36px;"></div>
-              </div>
+                  </div>
               <div class="chart-bar">
                 <div class="bar-threat"></div>
                 <div class="bar-fill" style="height: 56px;"></div>
-              </div>
+                  </div>
               <div class="chart-bar">
                 <div class="bar-threat"></div>
                 <div class="bar-fill" style="height: 84px;"></div>
-              </div>
+                </div>
               <div class="chart-bar">
                 <div class="bar-fill" style="height: 70px;"></div>
-              </div>
+                  </div>
               <div class="chart-bar">
                 <div class="bar-fill" style="height: 45px;"></div>
-              </div>
-            </div>
+                  </div>
+                </div>
             <div class="chart-x-axis">
               <span class="chart-x-label">Mar</span>
               <span class="chart-x-label">Apr</span>
@@ -1198,70 +1424,274 @@
               <span class="chart-x-label">Jun</span>
               <span class="chart-x-label">Jul</span>
               <span class="chart-x-label">Aug</span>
-            </div>
+              </div>
             <div class="chart-y-axis">
               <span class="chart-y-label">800</span>
               <span class="chart-y-label">0</span>
             </div>
           </div>
-        </div>
-
+          </div>
+          
         <!-- Your Additional Services -->
-        <div class="addons-section">
+        <div class="addons-section animate-in" style="--delay: 11">
           <div class="addons-header">
             <div class="addons-icon">
               <div class="addons-icon-bg"></div>
               <svg viewBox="0 0 24 24" fill="#007644" stroke="#007644" stroke-width="2">
                 <line x1="12" y1="5" x2="12" y2="19"/>
                 <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-            </div>
+                </svg>
+              </div>
             <span class="addons-title">Your Additional Services</span>
-          </div>
+            </div>
           <div class="addon-tile not-activated">
             <div class="addon-tile-content">
               <div class="addon-tile-text">
                 <div class="addon-tile-title-row">
                   <span class="addon-tile-title">Ultimate Help Desk</span>
                   <span class="addon-tile-label">New</span>
-                </div>
+            </div>
                 <span class="addon-tile-subtitle">Get on-demand IT help to fix tech issues.</span>
-              </div>
+            </div>
               <button class="addon-tile-btn">
                 Activate
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </button>
-            </div>
+          </div>
             <div class="addon-tile-illustration">
               <img src="Assets/Illustrations/Performance Pillar v1.1.0/Addon/Feature Tile/S/illu_s_029.svg" alt="Ultimate Help Desk illustration">
             </div>
+            </div>
           </div>
-        </div>
 
       </div>
     </main>
   </div>
 
   <script>
-    // Branch switcher keyboard shortcuts
-    // Press 1 → main branch | Press 2 → progressive-value branch
-    document.addEventListener('keydown', function(e) {
-      // Don't trigger if user is typing in an input
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    // ========================================
+    // PERFORMANCE DASHBOARD - Animation Controller
+    // ========================================
+    
+    (function() {
+      'use strict';
       
-      // Press 1 → main branch
-      if (e.key === '1' && !e.metaKey && !e.ctrlKey && !e.altKey) {
-        e.preventDefault();
-        window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/';
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Animation timing constants
+      const TIMING = {
+        stagger: prefersReducedMotion ? 0 : 60,
+        transition: prefersReducedMotion ? 0 : 300,
+        fast: prefersReducedMotion ? 0 : 200
+      };
+      
+      // Current state
+      let currentState = 'dashboard';
+      
+      // DOM Elements
+      const toolsCard = document.getElementById('toolsCard');
+      const browserCleanerRow = document.getElementById('browserCleanerRow');
+      const browserCleanerLock = document.getElementById('browserCleanerLock');
+      const browserCleanerStatus = document.getElementById('browserCleanerStatus');
+      const quickCleanSection = document.getElementById('quickCleanSection');
+      const exploreHeader = document.getElementById('exploreHeader');
+      
+      // ========================================
+      // Initial Page Load Animation
+      // ========================================
+      function runInitialAnimation() {
+        const animatedElements = document.querySelectorAll('.animate-in');
+        
+        animatedElements.forEach((el, index) => {
+          const delay = parseInt(el.style.getPropertyValue('--delay') || index) * TIMING.stagger;
+          
+          setTimeout(() => {
+            el.style.animationDelay = '0ms';
+            el.classList.add('animate-in-active');
+          }, delay);
+        });
       }
-      // Press 2 → progressive-value branch
-      if (e.key === '2' && !e.metaKey && !e.ctrlKey && !e.altKey) {
-        e.preventDefault();
-        window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/progressive-value/';
+      
+      // ========================================
+      // Transition to Browser Cleaner State
+      // ========================================
+      function transitionToBrowserCleaner() {
+        if (currentState === 'browser-cleaner') return;
+        currentState = 'browser-cleaner';
+        
+        // Step 1: Animate locks disappearing
+        const locks = document.querySelectorAll('.locked-lock');
+        locks.forEach((lock, index) => {
+          setTimeout(() => {
+            lock.classList.add('animate-disappear');
+          }, index * 50);
+        });
+        
+        // Browser cleaner lock
+        if (browserCleanerLock) {
+          browserCleanerLock.classList.add('animate-disappear');
+        }
+        
+        // Step 2: After locks disappear, show status dots
+        setTimeout(() => {
+          // Hide locks completely
+          locks.forEach(lock => {
+            lock.style.display = 'none';
+          });
+          if (browserCleanerLock) {
+            browserCleanerLock.style.display = 'none';
+          }
+          
+          // Show status dots
+          const statuses = document.querySelectorAll('.locked-status');
+          statuses.forEach((status, index) => {
+            setTimeout(() => {
+              status.style.display = 'block';
+              status.classList.add('animate-appear');
+            }, index * 50);
+          });
+          
+          if (browserCleanerStatus) {
+            browserCleanerStatus.style.display = 'block';
+            browserCleanerStatus.classList.add('animate-appear');
+          }
+          
+        }, TIMING.transition);
+        
+        // Step 3: Hide explore header and reorder
+        setTimeout(() => {
+          if (exploreHeader) {
+            exploreHeader.style.opacity = '0';
+            exploreHeader.style.height = '0';
+            exploreHeader.style.padding = '0';
+            exploreHeader.style.overflow = 'hidden';
+          }
+          
+          // Move browser cleaner row up (reorder in DOM)
+          const fileCleanupRow = document.querySelector('[data-tool="file-cleanup"]');
+          if (browserCleanerRow && fileCleanupRow) {
+            browserCleanerRow.style.transition = 'transform ' + TIMING.transition + 'ms var(--easing)';
+            fileCleanupRow.parentNode.insertBefore(browserCleanerRow, fileCleanupRow.nextSibling);
+          }
+          
+          // Show quick clean section
+          if (quickCleanSection) {
+            quickCleanSection.classList.add('visible');
+          }
+          
+        }, TIMING.transition + 100);
+        
+        // Update card state
+        setTimeout(() => {
+          toolsCard.setAttribute('data-state', 'browser-cleaner');
+        }, TIMING.transition + 200);
       }
-    });
+      
+      // ========================================
+      // Transition back to Dashboard State
+      // ========================================
+      function transitionToDashboard() {
+        if (currentState === 'dashboard') return;
+        currentState = 'dashboard';
+        
+        // Reset everything
+        toolsCard.setAttribute('data-state', 'dashboard');
+        
+        // Hide quick clean
+        if (quickCleanSection) {
+          quickCleanSection.classList.remove('visible');
+        }
+        
+        // Show explore header
+        if (exploreHeader) {
+          exploreHeader.style.opacity = '';
+          exploreHeader.style.height = '';
+          exploreHeader.style.padding = '';
+          exploreHeader.style.overflow = '';
+        }
+        
+        // Hide status dots, show locks
+        const statuses = document.querySelectorAll('.locked-status');
+        statuses.forEach(status => {
+          status.style.display = 'none';
+          status.classList.remove('animate-appear');
+        });
+        
+        if (browserCleanerStatus) {
+          browserCleanerStatus.style.display = 'none';
+          browserCleanerStatus.classList.remove('animate-appear');
+        }
+        
+        const locks = document.querySelectorAll('.locked-lock');
+        locks.forEach(lock => {
+          lock.style.display = '';
+          lock.classList.remove('animate-disappear');
+        });
+        
+        if (browserCleanerLock) {
+          browserCleanerLock.style.display = '';
+          browserCleanerLock.classList.remove('animate-disappear');
+        }
+        
+        // Move browser cleaner back to original position
+        const startupManagerRow = document.querySelector('[data-tool="startup-manager"]');
+        if (browserCleanerRow && startupManagerRow && exploreHeader) {
+          exploreHeader.parentNode.insertBefore(browserCleanerRow, exploreHeader.nextSibling);
+        }
+      }
+      
+      // ========================================
+      // Event Listeners
+      // ========================================
+      
+      // Browser Cleaner row click
+      if (browserCleanerRow) {
+        browserCleanerRow.addEventListener('click', function(e) {
+          e.preventDefault();
+          transitionToBrowserCleaner();
+        });
+      }
+      
+      // Explore header toggle (optional)
+      if (exploreHeader) {
+        exploreHeader.addEventListener('click', function(e) {
+          // Toggle expand/collapse if needed
+          this.classList.toggle('expanded');
+          this.classList.toggle('collapsed');
+        });
+      }
+      
+      // Back button or escape key to return to dashboard
+      document.addEventListener('keydown', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        
+        if (e.key === 'Escape' && currentState === 'browser-cleaner') {
+          transitionToDashboard();
+        }
+        
+        // Branch switcher keyboard shortcuts
+        if (e.key === '1' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+          e.preventDefault();
+          window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/';
+        }
+        if (e.key === '2' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+          e.preventDefault();
+          window.location.href = 'https://anaalthoff-gen.github.io/performance-dashboard/progressive-value/';
+        }
+      });
+      
+      // ========================================
+      // Initialize
+      // ========================================
+      document.addEventListener('DOMContentLoaded', function() {
+        // Run initial animation after a small delay
+        setTimeout(runInitialAnimation, 100);
+      });
+      
+    })();
   </script>
 </body>
 </html>
