@@ -1211,8 +1211,43 @@
             </div>
           </div>
 
-          <!-- Browser Cleaner (moves up after unlock) -->
-          <div class="tool-row clickable animate-in browser-cleaner-row" data-tool="browser-cleaner" id="browserCleanerRow" style="--delay: 5">
+          <!-- Startup Manager (always visible, always unlocked) -->
+          <div class="tool-row clickable animate-in" data-tool="startup-manager" style="--delay: 2">
+            <div class="tool-badge">
+              <div class="tool-badge-circle"></div>
+              <div class="tool-badge-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L4 5V11.09C4 16.14 7.41 20.85 12 22C16.59 20.85 20 16.14 20 11.09V5L12 2ZM18 11.09C18 15.09 15.45 18.79 12 19.92C8.55 18.79 6 15.1 6 11.09V6.39L12 4.14L18 6.39V11.09Z"/>
+                  <path d="M8 11L10.5 13.5L16 8L14.59 6.59L10.5 10.67L9.41 9.59L8 11Z"/>
+                </svg>
+              </div>
+              <div class="tool-badge-status"></div>
+            </div>
+            <div class="tool-content">
+              <span class="tool-title">Startup Manager</span>
+              <span class="tool-subtitle">Improve your Mac's startup time by selecting which apps to launch.</span>
+            </div>
+            <div class="tool-actions">
+              <span class="tool-stat">3 Apps</span>
+              <svg class="tool-chevron" viewBox="0 0 24 24">
+                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Divider before Explore section -->
+          <div class="tools-divider animate-in" style="--delay: 3"></div>
+
+          <!-- Explore More Section Header (Dashboard state only) -->
+          <div class="explore-header expanded animate-in dashboard-state" id="exploreHeader" style="--delay: 3">
+            <span class="explore-title">Explore more ways to improve performance</span>
+            <svg class="explore-chevron" viewBox="0 0 24 24">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+
+          <!-- Browser Cleaner (locked, moves up after unlock) -->
+          <div class="tool-row clickable animate-in browser-cleaner-row" data-tool="browser-cleaner" id="browserCleanerRow" style="--delay: 4">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1247,40 +1282,8 @@
             <div class="tools-divider"></div>
           </div>
 
-          <!-- Startup Manager (always visible, always unlocked) -->
-          <div class="tool-row clickable animate-in" data-tool="startup-manager" style="--delay: 2">
-            <div class="tool-badge">
-              <div class="tool-badge-circle"></div>
-              <div class="tool-badge-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L4 5V11.09C4 16.14 7.41 20.85 12 22C16.59 20.85 20 16.14 20 11.09V5L12 2ZM18 11.09C18 15.09 15.45 18.79 12 19.92C8.55 18.79 6 15.1 6 11.09V6.39L12 4.14L18 6.39V11.09Z"/>
-                  <path d="M8 11L10.5 13.5L16 8L14.59 6.59L10.5 10.67L9.41 9.59L8 11Z"/>
-                </svg>
-              </div>
-              <div class="tool-badge-status"></div>
-            </div>
-            <div class="tool-content">
-              <span class="tool-title">Startup Manager</span>
-              <span class="tool-subtitle">Improve your Mac's startup time by selecting which apps to launch.</span>
-            </div>
-            <div class="tool-actions">
-              <span class="tool-stat">3 Apps</span>
-              <svg class="tool-chevron" viewBox="0 0 24 24">
-                <path d="M9.29289 18.7071C8.90237 18.3166 8.90237 17.6834 9.29289 17.2929L14.5858 12L9.29289 6.70711C8.90237 6.31658 8.90237 5.68342 9.29289 5.29289C9.68342 4.90237 10.3166 4.90237 10.7071 5.29289L16.7071 11.2929C17.0976 11.6834 17.0976 12.3166 16.7071 12.7071L10.7071 18.7071C10.3166 19.0976 9.68342 19.0976 9.29289 18.7071Z"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Explore More Section Header (Dashboard state only) -->
-          <div class="explore-header expanded animate-in dashboard-state" id="exploreHeader" style="--delay: 3">
-            <span class="explore-title">Explore more ways to improve performance</span>
-            <svg class="explore-chevron" viewBox="0 0 24 24">
-              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
-          </div>
-
           <!-- Uninstaller -->
-          <div class="tool-row clickable animate-in" data-tool="uninstaller" style="--delay: 6">
+          <div class="tool-row clickable animate-in" data-tool="uninstaller" style="--delay: 5">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1306,7 +1309,7 @@
           </div>
 
           <!-- Duplicate Finder -->
-          <div class="tool-row clickable animate-in" data-tool="duplicate-finder" style="--delay: 7">
+          <div class="tool-row clickable animate-in" data-tool="duplicate-finder" style="--delay: 6">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1332,7 +1335,7 @@
           </div>
 
           <!-- Photo Cleaner -->
-          <div class="tool-row clickable animate-in" data-tool="photo-cleaner" style="--delay: 8">
+          <div class="tool-row clickable animate-in" data-tool="photo-cleaner" style="--delay: 7">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1358,7 +1361,7 @@
           </div>
 
           <!-- Cloud Drive Cleaner -->
-          <div class="tool-row clickable animate-in" data-tool="cloud-drive" style="--delay: 9">
+          <div class="tool-row clickable animate-in" data-tool="cloud-drive" style="--delay: 8">
             <div class="tool-badge">
               <div class="tool-badge-circle"></div>
               <div class="tool-badge-icon">
@@ -1561,8 +1564,9 @@
           
         }, TIMING.transition);
         
-        // Step 3: Hide explore header and reorder
+        // Step 3: Hide explore header, divider, and reorder
         setTimeout(() => {
+          // Hide explore header
           if (exploreHeader) {
             exploreHeader.style.opacity = '0';
             exploreHeader.style.height = '0';
@@ -1570,7 +1574,14 @@
             exploreHeader.style.overflow = 'hidden';
           }
           
-          // Move browser cleaner row up (reorder in DOM)
+          // Hide the divider before explore section
+          const exploreDivider = exploreHeader ? exploreHeader.previousElementSibling : null;
+          if (exploreDivider && exploreDivider.classList.contains('tools-divider')) {
+            exploreDivider.style.opacity = '0';
+            exploreDivider.style.height = '0';
+          }
+          
+          // Move browser cleaner row up (after File Cleanup)
           const fileCleanupRow = document.querySelector('[data-tool="file-cleanup"]');
           if (browserCleanerRow && fileCleanupRow) {
             browserCleanerRow.style.transition = 'transform ' + TIMING.transition + 'ms var(--easing)';
@@ -1613,6 +1624,13 @@
           exploreHeader.style.overflow = '';
         }
         
+        // Show the divider before explore section
+        const exploreDivider = exploreHeader ? exploreHeader.previousElementSibling : null;
+        if (exploreDivider && exploreDivider.classList.contains('tools-divider')) {
+          exploreDivider.style.opacity = '';
+          exploreDivider.style.height = '';
+        }
+        
         // Hide status dots, show locks
         const statuses = document.querySelectorAll('.locked-status');
         statuses.forEach(status => {
@@ -1636,9 +1654,8 @@
           browserCleanerLock.classList.remove('animate-disappear');
         }
         
-        // Move browser cleaner back to original position
-        const startupManagerRow = document.querySelector('[data-tool="startup-manager"]');
-        if (browserCleanerRow && startupManagerRow && exploreHeader) {
+        // Move browser cleaner back to original position (after explore header)
+        if (browserCleanerRow && exploreHeader) {
           exploreHeader.parentNode.insertBefore(browserCleanerRow, exploreHeader.nextSibling);
         }
       }
