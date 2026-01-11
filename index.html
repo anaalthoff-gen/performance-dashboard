@@ -557,7 +557,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 20px 8px 16px;
+      padding: 16px;
       cursor: pointer;
       transition: background var(--timing-fast) var(--easing);
     }
@@ -572,6 +572,7 @@
       color: #444;
       line-height: 24px;
       letter-spacing: -0.3px;
+      flex: 1;
     }
 
     .explore-chevron {
@@ -579,14 +580,31 @@
       height: 24px;
       fill: #444;
       transition: transform var(--timing-normal) var(--easing);
-    }
-
-    .explore-header.collapsed .explore-chevron {
-      transform: rotate(0deg);
+      flex-shrink: 0;
     }
 
     .explore-header.expanded .explore-chevron {
-      transform: rotate(90deg);
+      transform: rotate(0deg);
+    }
+
+    .explore-header.collapsed .explore-chevron {
+      transform: rotate(-90deg);
+    }
+
+    /* Collapsible items */
+    .explore-items {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: max-height var(--timing-normal) var(--easing), 
+                  opacity var(--timing-normal) var(--easing);
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .explore-items.collapsed {
+      max-height: 0;
+      opacity: 0;
     }
 
     /* Tool row transitions */
@@ -1241,10 +1259,13 @@
           <!-- Explore More Section Header (Dashboard state only) -->
           <div class="explore-header expanded animate-in dashboard-state" id="exploreHeader" style="--delay: 3">
             <span class="explore-title">Explore more ways to improve performance</span>
-            <svg class="explore-chevron" viewBox="0 0 24 24">
-              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            <svg class="explore-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.41 8.59L12 13.17L16.59 8.59L18 10L12 16L6 10L7.41 8.59Z" fill="currentColor"/>
             </svg>
           </div>
+
+          <!-- Collapsible items container -->
+          <div class="explore-items" id="exploreItems">
 
           <!-- Browser Cleaner (locked, moves up after unlock) -->
           <div class="tool-row clickable animate-in browser-cleaner-row" data-tool="browser-cleaner" id="browserCleanerRow" style="--delay: 4">
@@ -1384,6 +1405,8 @@
               </svg>
             </div>
           </div>
+
+          </div><!-- End explore-items -->
         </div>
 
         <!-- What You Have Cleaned Chart -->
@@ -1501,6 +1524,10 @@
       const browserCleanerStatus = document.getElementById('browserCleanerStatus');
       const quickCleanSection = document.getElementById('quickCleanSection');
       const exploreHeader = document.getElementById('exploreHeader');
+      const exploreItems = document.getElementById('exploreItems');
+      
+      // Explore section collapse/expand state
+      let isExploreExpanded = true;
       
       // ========================================
       // Initial Page Load Animation
@@ -1579,6 +1606,11 @@
             exploreHeader.style.transition = 'all ' + TIMING.transition + 'ms var(--easing)';
           }
           
+          // Hide explore items container (we'll move items out of it)
+          if (exploreItems) {
+            exploreItems.style.display = 'contents';
+          }
+          
           // Hide the divider before explore section
           const exploreDivider = exploreHeader ? exploreHeader.previousElementSibling : null;
           if (exploreDivider && exploreDivider.classList.contains('tools-divider')) {
@@ -1649,7 +1681,16 @@
           exploreHeader.style.padding = '';
           exploreHeader.style.overflow = '';
           exploreHeader.style.transition = '';
+          exploreHeader.classList.remove('collapsed');
+          exploreHeader.classList.add('expanded');
         }
+        
+        // Reset explore items container
+        if (exploreItems) {
+          exploreItems.style.display = '';
+          exploreItems.classList.remove('collapsed');
+        }
+        isExploreExpanded = true;
         
         // Show the divider before explore section
         const exploreDivider = document.querySelector('.tools-card > .tools-divider');
@@ -1730,12 +1771,23 @@
         });
       }
       
-      // Explore header toggle (optional)
-      if (exploreHeader) {
+      // Explore header toggle (collapse/expand items)
+      if (exploreHeader && exploreItems) {
         exploreHeader.addEventListener('click', function(e) {
-          // Toggle expand/collapse if needed
-          this.classList.toggle('expanded');
-          this.classList.toggle('collapsed');
+          // Don't toggle if we're in browser-cleaner state
+          if (currentState === 'browser-cleaner') return;
+          
+          isExploreExpanded = !isExploreExpanded;
+          
+          if (isExploreExpanded) {
+            this.classList.remove('collapsed');
+            this.classList.add('expanded');
+            exploreItems.classList.remove('collapsed');
+          } else {
+            this.classList.remove('expanded');
+            this.classList.add('collapsed');
+            exploreItems.classList.add('collapsed');
+          }
         });
       }
       
